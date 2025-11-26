@@ -7,38 +7,82 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class CreateWarehouseTest {
+public class WarehouseTest {
 
     /*
         For a warehouse to be created:
             Name needs to be added
                 - Name must contain at least 3 characters
-                - Name cannot have more than 50 characters
+                - Name cannot be empty
             Location needs to be added
                 - Location must include a country
+                        - Location country name must contain at least 3 characters
+                        - Name cannot be empty
                 - Location must include an address
                 - Locaiton must include a city
+                        - Location city name must contain at least 3 characters
+                        - Name cannot be empty
                 - If the country in United States of America, location must include the city
                 - If the country in United States of America, location must include the state
                 - If the country is not the United States of America, an optional region field should be shown
             Maximum capacity must be added
     */
 
+    // Creation Tests
     @Test
     @DisplayName("Name has at least three characters")
     public void testNameHasThreeCharacters() {
-        assertFalse(CreateWarehouse.hasThreeCharacters(""));
-        assertFalse(CreateWarehouse.hasThreeCharacters("Hi"));
-        assertThrows(NullPointerException.class, () -> {
-            CreateWarehouse.hasThreeCharacters(null);
-        });
-        assertTrue(CreateWarehouse.hasThreeCharacters("Warehouse 1"));
+        assertFalse(Warehouse.hasThreeCharacters(""));
+        assertFalse(Warehouse.hasThreeCharacters("Hi"));
+        assertTrue(Warehouse.notEmptyString("Warehouse 1"));
     }
 
     @Test
-    @DisplayName("Name has less than 50 characters")
-    public void testNameHasLessThanFiftyCharacters() {
-        assertTrue(CreateWarehouse.hasLessThanFiftyCharacters("I AM FIFTY CHARACTERS LONG WAHAHAHAHAHA!!!!!!!!!!!"));
-        assertFalse(CreateWarehouse.hasLessThanFiftyCharacters("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."));
+    @DisplayName("Name is not null") 
+    public void testNameIsNotNull(){
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.notEmptyString(null);
+        });
+        assertTrue(Warehouse.notEmptyString("Warehouse 1"));
+    }
+
+    @Test
+    @DisplayName("Country name has at least three characters")
+    public void testCountryHasThreeCharacters() {
+        assertFalse(Warehouse.hasThreeCharacters(""));
+        assertFalse(Warehouse.hasThreeCharacters("US"));
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.hasThreeCharacters(null);
+        });
+        assertTrue(Warehouse.hasThreeCharacters("United States of America"));
+    }
+    
+    @Test
+    @DisplayName("Country is not null") 
+    public void testCountryIsNotNull(){
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.notEmptyString(null);
+        });
+        assertTrue(Warehouse.notEmptyString("United Kingdom"));
+    }
+
+    @Test
+    @DisplayName("City name has at least three characters")
+    public void testCityHasThreeCharacters() {
+        assertFalse(Warehouse.hasThreeCharacters(""));
+        assertFalse(Warehouse.hasThreeCharacters("aa"));
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.hasThreeCharacters(null);
+        });
+        assertTrue(Warehouse.hasThreeCharacters("Woodburn"));
+    }
+    
+    @Test
+    @DisplayName("City is not null") 
+    public void testCityIsNotNull(){
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.notEmptyString(null);
+        });
+        assertTrue(Warehouse.notEmptyString("Woodburn"));
     }
 }

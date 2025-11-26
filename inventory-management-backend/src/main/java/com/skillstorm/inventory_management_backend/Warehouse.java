@@ -1,28 +1,14 @@
 package com.skillstorm.inventory_management_backend;
 
-public class CreateWarehouse {
+public class Warehouse {
     
     public static boolean hasThreeCharacters(String input) {
-        try {
-            if (input.length() > 2) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        } catch (Exception e) {
-            throw e;
-        }
+            return input.length() >= 3;
     }
 
-    public static boolean hasLessThanFiftyCharacters(String input) {
+    public static boolean notEmptyString(String input) {
         try {
-            if (input.length() <= 50) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return !input.isEmpty();
         } catch (Exception e) {
             throw e;
         }
