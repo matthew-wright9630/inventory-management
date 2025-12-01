@@ -17,13 +17,19 @@ public class WarehouseTest {
             Location needs to be added
                 - Location must include a country
                         - Location country name must contain at least 3 characters
-                        - Name cannot be empty
+                        - Country cannot be empty
                 - Locaiton must include a city
                         - Location city name must contain at least 3 characters
-                        - Name cannot be empty
+                        - City cannot be empty
                 - Location must include an address
+                        - Address must contain at least 3 characters
+                        - Address cannot be empty
                 - Location should include a state/region field
+                        - State/Region must contain at least 3 characters
+                        - State/Region cannot be empty
             Maximum capacity must be added
+                - Max Capacity must be an integer value
+                - Max Capacity must be greater than 0
     */
 
     // Creation Tests
@@ -77,10 +83,74 @@ public class WarehouseTest {
     
     @Test
     @DisplayName("City is not null") 
-    public void testCityIsNotNull(){
+    public void testCityIsNotNull() {
         assertThrows(NullPointerException.class, () -> {
             Warehouse.notEmptyString(null);
         });
-        assertTrue(Warehouse.notEmptyString("Woodburn"));
+        assertTrue(Warehouse.notEmptyString("Greenville"));
+    }
+
+    @Test
+    @DisplayName("Address has at least three characters")
+    public void testAddressHasThreeCharacters() {
+        assertFalse(Warehouse.hasThreeCharacters(""));
+        assertFalse(Warehouse.hasThreeCharacters("aa"));
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.hasThreeCharacters(null);
+        });
+        assertTrue(Warehouse.hasThreeCharacters("987 Testing Ave."));
+    }
+
+    @Test
+    @DisplayName("Location Address is not Null")
+    public void testAddressIsNotNull() {
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.notEmptyString(null);
+        });
+        assertTrue(Warehouse.notEmptyString("1234 Test Rd"));
+    }
+
+    @Test
+    @DisplayName("State or region has at least two characters")
+    public void testStateOrRegionHasThreeCharacters() {
+        assertFalse(Warehouse.hasTwoCharacters(""));
+        assertFalse(Warehouse.hasTwoCharacters("a"));
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.hasTwoCharacters(null);
+        });
+        assertTrue(Warehouse.hasTwoCharacters("IN"));
+        assertTrue(Warehouse.hasTwoCharacters("Idiana"));
+    }
+
+    @Test
+    @DisplayName("State or region is not Null")
+    public void testStateOrRegionIsNotNull() {
+        assertThrows(NullPointerException.class, () -> {
+            Warehouse.notEmptyString(null);
+        });
+        assertTrue(Warehouse.notEmptyString("South Carolina"));
+    }
+
+    @Test
+    @DisplayName("Max Capacity is an integer")
+    public void testMaxCapacityIsInteger() {
+        assertThrows(NumberFormatException.class, () -> {
+            Warehouse.inputIsInteger("Test");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Warehouse.inputIsInteger("15.5");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Warehouse.inputIsInteger("true");
+        });
+        assertTrue(Warehouse.inputIsInteger("10000"));
+    }
+
+    @Test
+    @DisplayName("Maximum Capacity is greater than zero")
+    public void testMaxCapacityIsGreaterThanZero() {
+        assertFalse(Warehouse.greaterThanZero(0));
+        assertFalse(Warehouse.greaterThanZero(-100));
+        assertTrue(Warehouse.greaterThanZero(1000));
     }
 }

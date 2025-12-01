@@ -13,4 +13,21 @@ public class Warehouse {
             throw e;
         }
     }
+
+    public static boolean hasTwoCharacters(String input) {
+        return input.length() >= 2;
+    }
+
+    public static boolean inputIsInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static boolean greaterThanZero(int input) {
+        return input > 0;
+    }
 }
