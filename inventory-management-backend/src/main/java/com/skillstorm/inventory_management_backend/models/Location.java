@@ -1,4 +1,4 @@
-package com.skillstorm.inventory_management_backend;
+package com.skillstorm.inventory_management_backend.models;
 
 import java.util.Set;
 
