@@ -10,10 +10,10 @@ import com.skillstorm.inventory_management_backend.repositories.LocationReposito
 
 @Service
 public class LocationService {
-    
+
     private final LocationRepository locationRepository;
 
-    LocationService(LocationRepository locationRepository) {
+    public LocationService(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
