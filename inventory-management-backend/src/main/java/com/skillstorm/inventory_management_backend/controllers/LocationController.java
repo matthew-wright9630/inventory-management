@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.inventory_management_backend.models.Location;
 import com.skillstorm.inventory_management_backend.services.LocationService;
+import com.skillstorm.inventory_management_backend.validators.LocationValidator;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class LocationController {
     @PostMapping
     public ResponseEntity<Location> createLocation(@RequestBody Location location) {
         try {
+            LocationValidator.validateLocation(location);
             return new ResponseEntity<>(locationService.saveLocation(location), HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();

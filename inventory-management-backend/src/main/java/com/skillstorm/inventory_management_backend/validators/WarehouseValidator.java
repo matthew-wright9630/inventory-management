@@ -5,7 +5,7 @@ import com.skillstorm.inventory_management_backend.models.Warehouse;
 
 public class WarehouseValidator {
 
-    public boolean validateWarehouse(Warehouse warehouse) {
+    public static boolean validateWarehouse(Warehouse warehouse) {
         return (hasThreeCharacters(warehouse.getName()) && notEmptyString(warehouse.getName())
                 && hasThreeCharacters(warehouse.getAddress()) && notEmptyString(warehouse.getAddress())
                 && hasThreeCharacters(warehouse.getAddressLineTwo()) && notEmptyString(warehouse.getAddressLineTwo())

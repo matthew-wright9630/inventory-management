@@ -21,11 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class WarehouseController {
 
     private final WarehouseService warehouseService;
-    private WarehouseValidator validator;
 
-    public WarehouseController(WarehouseService warehouseService, WarehouseValidator validator) {
+    public WarehouseController(WarehouseService warehouseService) {
         this.warehouseService = warehouseService;
-        this.validator = validator;
     }
 
     @GetMapping
@@ -53,7 +51,7 @@ public class WarehouseController {
     @PostMapping
     public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse) {
         try {
-            validator.validateWarehouse(warehouse);
+            WarehouseValidator.validateWarehouse(warehouse);
             Warehouse returnedWarehouse = warehouseService.createWarehouse(warehouse);
             return new ResponseEntity<>(returnedWarehouse, HttpStatus.CREATED);
         } catch (Exception e) {
