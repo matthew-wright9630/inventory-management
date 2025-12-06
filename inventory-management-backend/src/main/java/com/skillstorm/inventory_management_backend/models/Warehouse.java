@@ -1,5 +1,9 @@
 package com.skillstorm.inventory_management_backend.models;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Warehouse {
@@ -38,8 +43,12 @@ public class Warehouse {
     public Warehouse() {
     }
 
+    @OneToMany(targetEntity = Warehouse.class, mappedBy = "location")
+    @JsonIgnore
+    private Set<StorageBin> storageBins;
+
     public Warehouse(int id, String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive,
-            Location location) {
+            Location location, Set<StorageBin> storageBins) {
         this.id = id;
         this.name = name;
         this.maximumCapacity = maximumCapacity;
@@ -47,16 +56,18 @@ public class Warehouse {
         this.addressLineTwo = addressLineTwo;
         this.isActive = isActive;
         this.location = location;
+        this.storageBins = storageBins;
     }
 
     public Warehouse(String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive,
-            Location location) {
+            Location location, Set<StorageBin> storageBins) {
         this.name = name;
         this.maximumCapacity = maximumCapacity;
         this.address = address;
         this.addressLineTwo = addressLineTwo;
         this.isActive = isActive;
         this.location = location;
+        this.storageBins = storageBins;
     }
 
     public int getId() {
@@ -115,6 +126,19 @@ public class Warehouse {
         this.isActive = isActive;
     }
 
+    public Set<StorageBin> getStorageBins() {
+        return storageBins;
+    }
+
+    public void setStorageBins(Set<StorageBin> storageBins) {
+        this.storageBins = storageBins;
+    }
+
+    public boolean isEmpty() {
+        System.out.println(id);
+        return (id <= 0);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -126,6 +150,7 @@ public class Warehouse {
         result = prime * result + ((addressLineTwo == null) ? 0 : addressLineTwo.hashCode());
         result = prime * result + (isActive ? 1231 : 1237);
         result = prime * result + ((location == null) ? 0 : location.hashCode());
+        result = prime * result + ((storageBins == null) ? 0 : storageBins.hashCode());
         return result;
     }
 
@@ -164,6 +189,11 @@ public class Warehouse {
                 return false;
         } else if (!location.equals(other.location))
             return false;
+        if (storageBins == null) {
+            if (other.storageBins != null)
+                return false;
+        } else if (!storageBins.equals(other.storageBins))
+            return false;
         return true;
     }
 
@@ -173,4 +203,5 @@ public class Warehouse {
                 + address + ", addressLineTwo=" + addressLineTwo + ", isActive=" + isActive + ", location=" + location
                 + "]";
     }
+
 }

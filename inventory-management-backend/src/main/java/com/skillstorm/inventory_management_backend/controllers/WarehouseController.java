@@ -2,7 +2,6 @@ package com.skillstorm.inventory_management_backend.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skillstorm.inventory_management_backend.models.Location;
 import com.skillstorm.inventory_management_backend.models.Warehouse;
 import com.skillstorm.inventory_management_backend.services.WarehouseService;
 import com.skillstorm.inventory_management_backend.validators.WarehouseValidator;

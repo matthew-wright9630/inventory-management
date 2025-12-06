@@ -42,7 +42,7 @@ public class LocationTest {
 
     @Test
     @DisplayName("State or region has at least two characters")
-    public void testStateOrRegionHasThreeCharacters() {
+    public void testStateOrRegionHasTwoCharacters() {
         assertFalse(LocationValidator.hasTwoCharacters(""));
         assertFalse(LocationValidator.hasTwoCharacters("a"));
         assertThrows(NullPointerException.class, () -> {
