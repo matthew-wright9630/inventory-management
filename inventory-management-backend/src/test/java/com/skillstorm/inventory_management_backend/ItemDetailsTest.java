@@ -27,15 +27,19 @@ public class ItemDetailsTest {
     @Test
     @DisplayName("Item Details Name has at least three characters")
     public void testNameHasThreeCharacters() {
-        assertFalse(ItemDetailsValidator.hasThreeCharacters(""));
-        assertFalse(ItemDetailsValidator.hasThreeCharacters("IT"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemDetailsValidator.hasThreeCharacters("");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemDetailsValidator.hasThreeCharacters("IT");
+        });
         assertTrue(ItemDetailsValidator.notEmptyString("Item details 1"));
     }
 
     @Test
     @DisplayName("Item Details Name is not null")
     public void testNameIsNotNull() {
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             ItemDetailsValidator.notEmptyString(null);
         });
         assertTrue(ItemDetailsValidator.notEmptyString("New item details"));
@@ -44,7 +48,7 @@ public class ItemDetailsTest {
     @Test
     @DisplayName("SKU number is not null")
     public void testSKUIsNotNull() {
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             ItemDetailsValidator.notEmptyString(null);
         });
         assertTrue(ItemDetailsValidator.notEmptyString("1"));
@@ -54,10 +58,11 @@ public class ItemDetailsTest {
     @Test
     @DisplayName("Item description field has at least three characters")
     public void testDescriptionHasThreeCharacters() {
-        assertFalse(ItemDetailsValidator.hasThreeCharacters(""));
-        assertFalse(ItemDetailsValidator.hasThreeCharacters("aa"));
-        assertThrows(NullPointerException.class, () -> {
-            ItemDetailsValidator.hasThreeCharacters(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemDetailsValidator.hasThreeCharacters("");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemDetailsValidator.hasThreeCharacters("aa");
         });
         assertTrue(ItemDetailsValidator
                 .hasThreeCharacters("This is a details of a test item. A real item does not exist."));
@@ -66,7 +71,7 @@ public class ItemDetailsTest {
     @Test
     @DisplayName("Item description field is not Null")
     public void testDescriptionIsNotNull() {
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             ItemDetailsValidator.notEmptyString(null);
         });
         assertTrue(ItemDetailsValidator.notEmptyString("Test Description"));
@@ -75,7 +80,7 @@ public class ItemDetailsTest {
     @Test
     @DisplayName("Shelf-life is an integer")
     public void testShelfLifeIsInteger() {
-        assertThrows(NumberFormatException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             ItemDetailsValidator.inputIsInteger("Test");
         });
         assertThrows(IllegalArgumentException.class, () -> {
@@ -90,8 +95,12 @@ public class ItemDetailsTest {
     @Test
     @DisplayName("Shelf life is greater than zero")
     public void testShelfLifeIsGreaterThanZero() {
-        assertFalse(ItemDetailsValidator.greaterThanZero(0));
-        assertFalse(ItemDetailsValidator.greaterThanZero(-100));
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemDetailsValidator.greaterThanZero(0);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemDetailsValidator.greaterThanZero(-100);
+        });
         assertTrue(ItemDetailsValidator.greaterThanZero(1000));
     }
 }
