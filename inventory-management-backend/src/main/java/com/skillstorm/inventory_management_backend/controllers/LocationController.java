@@ -51,6 +51,7 @@ public class LocationController {
     @PutMapping
     public ResponseEntity<Location> updateLocation(@RequestBody Location location) {
         try {
+            LocationValidator.validateLocation(location);
             Location newLocation = locationService.saveLocation(location);
             return new ResponseEntity<Location>(newLocation, HttpStatus.OK);
         } catch (Exception e) {

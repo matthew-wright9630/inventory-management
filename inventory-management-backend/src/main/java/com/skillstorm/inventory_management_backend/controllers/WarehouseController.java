@@ -71,6 +71,7 @@ public class WarehouseController {
     @PutMapping
     public ResponseEntity<Warehouse> updateWarehouse(@RequestBody Warehouse warehouse) {
         try {
+            WarehouseValidator.validateWarehouse(warehouse);
             Warehouse updatedWarehouse = warehouseService.saveWarehouse(warehouse);
             return new ResponseEntity<>(updatedWarehouse, HttpStatus.OK);
         } catch (Exception e) {
