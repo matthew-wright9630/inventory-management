@@ -1,7 +1,5 @@
 package com.skillstorm.inventory_management_backend.models;
 
-import org.hibernate.annotations.ManyToAny;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +20,6 @@ public class StorageBin {
     @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
 
-    @Id
     @Column(name = "storage_location")
     private String storageLocation;
 

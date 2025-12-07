@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.skillstorm.inventory_management_backend.models.StorageBin;
 import com.skillstorm.inventory_management_backend.models.Warehouse;
 import com.skillstorm.inventory_management_backend.repositories.StorageBinRepository;
 
+@Service
 public class StorageBinService {
     private final StorageBinRepository storageBinRepository;
 

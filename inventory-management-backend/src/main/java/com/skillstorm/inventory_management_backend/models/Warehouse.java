@@ -40,12 +40,12 @@ public class Warehouse {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    public Warehouse() {
-    }
-
-    @OneToMany(targetEntity = Warehouse.class, mappedBy = "location")
+    @OneToMany(mappedBy = "warehouse")
     @JsonIgnore
     private Set<StorageBin> storageBins;
+
+    public Warehouse() {
+    }
 
     public Warehouse(int id, String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive,
             Location location, Set<StorageBin> storageBins) {

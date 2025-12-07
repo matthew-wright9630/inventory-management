@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.inventory_management_backend.models.StorageBin;
 import com.skillstorm.inventory_management_backend.models.Warehouse;
@@ -17,6 +19,8 @@ import com.skillstorm.inventory_management_backend.services.StorageBinService;
 import com.skillstorm.inventory_management_backend.services.WarehouseService;
 import com.skillstorm.inventory_management_backend.validators.StorageBinValidator;
 
+@RestController
+@RequestMapping("/storage-bin")
 public class StorageBinController {
 
     private final StorageBinService storageBinService;
@@ -40,7 +44,7 @@ public class StorageBinController {
     @PostMapping
     public ResponseEntity<StorageBin> createStorageBin(@RequestBody StorageBin storageBin) {
         try {
-            Warehouse warehouse = warehouseService.findWarehouseById(storageBin.getId());
+            Warehouse warehouse = warehouseService.findWarehouseById(storageBin.getWarehouse().getId());
             List<String> activeLocations = storageBinService.findAllActiveStorageBinLocationsInWarehouse(warehouse);
             StorageBinValidator.validateStorageBin(storageBin, activeLocations);
 
@@ -62,7 +66,7 @@ public class StorageBinController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLocation(@PathVariable int id) {
+    public ResponseEntity<Void> deleteStorageBin(@PathVariable int id) {
         try {
             StorageBin storageBin = storageBinService.findStorageBinById(id);
             storageBinService.deleteStorageBin(storageBin);
