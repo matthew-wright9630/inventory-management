@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +18,7 @@ public class StorageBinTest {
 
     /**
      * Storage bin must include a warehouse
-     * Storage bin must include a storage warehouse in the warehouse
+     * Storage bin must include a storage location in the warehouse
      * - Storage warehouse cannot be empty
      * - Storage warehouse must include at least 2 characters
      * A storage bin cannot share a storage location with another active storage bin
@@ -57,7 +60,9 @@ public class StorageBinTest {
     @Test
     @DisplayName("Storage bins that share a warehouse are not able to share a storage location.")
     public void testStorageBinDoesNotShareLocationWithActiveStorageBin() {
-        String[] locations = { "1A", "1B" };
+        List<String> locations = new ArrayList<>();
+        locations.add("1A");
+        locations.add("1B");
         StorageBin storageBin1 = new StorageBin();
         storageBin1.setStorageLocation("1B");
         StorageBin storageBin2 = new StorageBin();

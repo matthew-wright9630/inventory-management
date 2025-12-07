@@ -5,10 +5,14 @@ import java.util.List;
 import com.skillstorm.inventory_management_backend.models.StorageBin;
 import com.skillstorm.inventory_management_backend.models.Warehouse;
 
+import java.util.List;
+
 public class StorageBinValidator {
 
     public static boolean validateStorageBin(StorageBin storageBin, List<String> activeLocations) {
-        return (notEmptyString(""));
+        return (notEmptyString(storageBin.getStorageLocation()) && hasTwoCharacters(storageBin.getStorageLocation())
+                && warehouseIsNotEmpty(storageBin.getWarehouse())
+                && storageBinLocationIsUnique(activeLocations, storageBin));
     }
 
     public static boolean notEmptyString(String input) {
@@ -32,7 +36,7 @@ public class StorageBinValidator {
         }
     }
 
-    public static boolean storageBinLocationIsUnique(String[] storageLocationArray, StorageBin storageBin2) {
+    public static boolean storageBinLocationIsUnique(List<String> storageLocationArray, StorageBin storageBin2) {
         String newStorageLocation = storageBin2.getStorageLocation();
         try {
             for (String s : storageLocationArray) {
