@@ -8,7 +8,7 @@ import com.skillstorm.inventory_management_backend.models.StorageBin;
 public class ItemValidator {
 
     public static boolean validateItem(Item item) {
-        return (storageBinIsNotEmpty(item.getStorageBin()) && lotNumberIsNotEmpty(item.getLotNumber())
+        return (storageBinIsNotEmpty(item.getStorageBin())
                 && itemDetailIsNotEmpty(item.getItemDetail()));
     }
 

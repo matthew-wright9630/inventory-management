@@ -1,5 +1,9 @@
 package com.skillstorm.inventory_management_backend.models;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Item {
@@ -20,9 +25,9 @@ public class Item {
     @JoinColumn(name = "item_detail_id")
     private ItemDetail itemDetail;
 
-    @ManyToOne
-    @JoinColumn(name = "lot_id")
-    private LotNumber lotNumber;
+    @OneToMany(mappedBy = "Item")
+    @JsonIgnore
+    private Set<LotNumber> lotNumbers;
 
     @ManyToOne
     @JoinColumn(name = "storage_bin_id")
@@ -34,9 +39,8 @@ public class Item {
     public Item() {
     }
 
-    public Item(ItemDetail itemDetail, LotNumber lotNumber, StorageBin storageBin, Boolean isActive) {
+    public Item(ItemDetail itemDetail, StorageBin storageBin, Boolean isActive) {
         this.itemDetail = itemDetail;
-        this.lotNumber = lotNumber;
         this.storageBin = storageBin;
         this.isActive = isActive;
     }
@@ -57,12 +61,12 @@ public class Item {
         this.itemDetail = itemDetail;
     }
 
-    public LotNumber getLotNumber() {
-        return lotNumber;
+    public Set<LotNumber> getLotNumbers() {
+        return lotNumbers;
     }
 
-    public void setLotNumber(LotNumber lotNumber) {
-        this.lotNumber = lotNumber;
+    public void setLotNumbers(Set<LotNumber> lotNumbers) {
+        this.lotNumbers = lotNumbers;
     }
 
     public StorageBin getStorageBin() {
@@ -87,7 +91,7 @@ public class Item {
         int result = 1;
         result = prime * result + id;
         result = prime * result + ((itemDetail == null) ? 0 : itemDetail.hashCode());
-        result = prime * result + ((lotNumber == null) ? 0 : lotNumber.hashCode());
+        result = prime * result + ((lotNumbers == null) ? 0 : lotNumbers.hashCode());
         result = prime * result + ((storageBin == null) ? 0 : storageBin.hashCode());
         result = prime * result + ((isActive == null) ? 0 : isActive.hashCode());
         return result;
@@ -109,10 +113,10 @@ public class Item {
                 return false;
         } else if (!itemDetail.equals(other.itemDetail))
             return false;
-        if (lotNumber == null) {
-            if (other.lotNumber != null)
+        if (lotNumbers == null) {
+            if (other.lotNumbers != null)
                 return false;
-        } else if (!lotNumber.equals(other.lotNumber))
+        } else if (!lotNumbers.equals(other.lotNumbers))
             return false;
         if (storageBin == null) {
             if (other.storageBin != null)
@@ -129,7 +133,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item [id=" + id + ", itemDetail=" + itemDetail + ", lotNumber=" + lotNumber + ", storageBin="
-                + storageBin + ", isActive=" + isActive + "]";
+        return "Item [id=" + id + ", itemDetail=" + itemDetail + ", storageBin=" + storageBin + ", isActive=" + isActive
+                + "]";
     }
 }
