@@ -27,8 +27,12 @@ public class StorageBinValidator {
 
     public static boolean warehouseIsNotEmpty(Warehouse warehouse) {
         try {
-            return !warehouse.isEmpty();
-
+            int warehouseId = warehouse.getId();
+            if (warehouseId > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             throw e;
         }

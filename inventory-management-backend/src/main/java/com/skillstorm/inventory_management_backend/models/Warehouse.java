@@ -44,23 +44,15 @@ public class Warehouse {
     @JsonIgnore
     private Set<StorageBin> storageBins;
 
+    @OneToMany(mappedBy = "warehouse")
+    @JsonIgnore
+    private Set<WarehouseLots> warehouseLots;
+
     public Warehouse() {
     }
 
-    public Warehouse(int id, String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive,
-            Location location, Set<StorageBin> storageBins) {
-        this.id = id;
-        this.name = name;
-        this.maximumCapacity = maximumCapacity;
-        this.address = address;
-        this.addressLineTwo = addressLineTwo;
-        this.isActive = isActive;
-        this.location = location;
-        this.storageBins = storageBins;
-    }
-
     public Warehouse(String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive,
-            Location location, Set<StorageBin> storageBins) {
+            Location location, Set<StorageBin> storageBins, Set<WarehouseLots> warehouseLots) {
         this.name = name;
         this.maximumCapacity = maximumCapacity;
         this.address = address;
@@ -68,6 +60,7 @@ public class Warehouse {
         this.isActive = isActive;
         this.location = location;
         this.storageBins = storageBins;
+        this.warehouseLots = warehouseLots;
     }
 
     public int getId() {
@@ -134,9 +127,12 @@ public class Warehouse {
         this.storageBins = storageBins;
     }
 
-    public boolean isEmpty() {
-        System.out.println(id);
-        return (id <= 0);
+    public Set<WarehouseLots> getWarehouseLots() {
+        return warehouseLots;
+    }
+
+    public void setWarehouseLots(Set<WarehouseLots> warehouseLots) {
+        this.warehouseLots = warehouseLots;
     }
 
     @Override
@@ -148,9 +144,10 @@ public class Warehouse {
         result = prime * result + maximumCapacity;
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((addressLineTwo == null) ? 0 : addressLineTwo.hashCode());
-        result = prime * result + (isActive ? 1231 : 1237);
+        result = prime * result + ((isActive == null) ? 0 : isActive.hashCode());
         result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + ((storageBins == null) ? 0 : storageBins.hashCode());
+        result = prime * result + ((warehouseLots == null) ? 0 : warehouseLots.hashCode());
         return result;
     }
 
@@ -182,7 +179,10 @@ public class Warehouse {
                 return false;
         } else if (!addressLineTwo.equals(other.addressLineTwo))
             return false;
-        if (isActive != other.isActive)
+        if (isActive == null) {
+            if (other.isActive != null)
+                return false;
+        } else if (!isActive.equals(other.isActive))
             return false;
         if (location == null) {
             if (other.location != null)
@@ -194,6 +194,11 @@ public class Warehouse {
                 return false;
         } else if (!storageBins.equals(other.storageBins))
             return false;
+        if (warehouseLots == null) {
+            if (other.warehouseLots != null)
+                return false;
+        } else if (!warehouseLots.equals(other.warehouseLots))
+            return false;
         return true;
     }
 
@@ -203,5 +208,4 @@ public class Warehouse {
                 + address + ", addressLineTwo=" + addressLineTwo + ", isActive=" + isActive + ", location=" + location
                 + "]";
     }
-
 }
