@@ -15,7 +15,7 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Integer> {
 
     // public List<Warehouse> findWarehousesBy
 
-    @Query("update Warehouse l set l.isActive = :new_isActive where id = :warehouse_id")
+    @Query("update Warehouse w set w.isActive = :new_isActive where id = :warehouse_id")
     @Modifying
     @Transactional
     public int deleteWarehouse(@Param("warehouse_id") int id, @Param("new_isActive") boolean active);

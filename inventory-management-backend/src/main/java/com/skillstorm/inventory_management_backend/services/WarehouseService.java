@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.skillstorm.inventory_management_backend.models.Location;
 import com.skillstorm.inventory_management_backend.models.Warehouse;
 import com.skillstorm.inventory_management_backend.repositories.WarehouseRepository;
+import com.skillstorm.inventory_management_backend.validators.WarehouseValidator;
 
 @Service
 public class WarehouseService {
@@ -32,19 +33,20 @@ public class WarehouseService {
         if (warehouse.isPresent()) {
             return warehouse.get();
         }
-        return null;
+        throw new IllegalArgumentException("Warehouse does not exist. Please try with another warehouse.");
     }
 
-    public Warehouse createWarehouse(Warehouse warehouse, int locationId) throws IllegalArgumentException {
-        try {
-            Location location = locationService.findLocationById(locationId);
-            if (location.getId() > 0) {
-                warehouse.setLocation(location);
-            }
-            return warehouseRepository.save(warehouse);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Location does not exist");
+    public Warehouse createWarehouse(Warehouse warehouse, int locationId) {
+        Location location = locationService.findLocationById(locationId);
+        if (location.getId() <= 0) {
+            throw new IllegalArgumentException("Location does not exist. Please try with another location.");
         }
+        warehouse.setLocation(location);
+        if (WarehouseValidator.validateWarehouse(warehouse)) {
+            return warehouseRepository.save(warehouse);
+        }
+        throw new IllegalArgumentException("Values were not input as expected. input: " + warehouse);
+
     }
 
     public List<Warehouse> findWarehousesByCapacityLeft(int capacityPercent) {
@@ -58,13 +60,27 @@ public class WarehouseService {
         return returnedWarehouses;
     }
 
-    public Warehouse saveWarehouse(Warehouse warehouse) {
-        warehouseRepository.save(warehouse);
-        return warehouse;
+    public Warehouse saveWarehouse(Warehouse warehouse, int locationId) {
+
+        Location location = locationService.findLocationById(locationId);
+        if (location.getId() <= 0) {
+            throw new IllegalArgumentException("Location does not exist. Please try with another location.");
+        }
+        if (warehouse.getId() > 0) {
+            warehouse.setLocation(location);
+            WarehouseValidator.validateWarehouse(warehouse);
+            warehouseRepository.save(warehouse);
+            return warehouse;
+        }
+        throw new IllegalArgumentException("Warehouse does not exist. Please try with another warehouse.");
     }
 
-    public Warehouse deleteWarehouse(Warehouse warehouse) {
-        warehouseRepository.deleteWarehouse(warehouse.getId(), false);
-        return warehouse;
+    public Warehouse deleteWarehouse(int id) {
+        Warehouse foundLocation = findWarehouseById(id);
+        if (foundLocation.getId() > 0) {
+            warehouseRepository.deleteWarehouse(foundLocation.getId(), false);
+            return foundLocation;
+        }
+        throw new IllegalArgumentException("Warehouse does not exist. Please try with another location.");
     }
 }

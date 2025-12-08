@@ -61,7 +61,6 @@ public class WarehouseController {
     @PostMapping
     public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse, @RequestParam int locationId) {
         try {
-            WarehouseValidator.validateWarehouse(warehouse);
             Warehouse returnedWarehouse = warehouseService.createWarehouse(warehouse, locationId);
             return new ResponseEntity<>(returnedWarehouse, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
@@ -72,11 +71,13 @@ public class WarehouseController {
     }
 
     @PutMapping
-    public ResponseEntity<Warehouse> updateWarehouse(@RequestBody Warehouse warehouse) {
+    public ResponseEntity<Warehouse> updateWarehouse(@RequestBody Warehouse warehouse,
+            @RequestParam(defaultValue = "0") int locationId) {
         try {
-            WarehouseValidator.validateWarehouse(warehouse);
-            Warehouse updatedWarehouse = warehouseService.saveWarehouse(warehouse);
+            Warehouse updatedWarehouse = warehouseService.saveWarehouse(warehouse, locationId);
             return new ResponseEntity<>(updatedWarehouse, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
@@ -85,9 +86,10 @@ public class WarehouseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(@PathVariable int id) {
         try {
-            Warehouse warehouse = warehouseService.findWarehouseById(id);
-            warehouseService.deleteWarehouse(warehouse);
+            warehouseService.deleteWarehouse(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }

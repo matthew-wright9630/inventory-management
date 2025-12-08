@@ -1,6 +1,5 @@
 package com.skillstorm.inventory_management_backend.services;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
-    public Location findLocationById(int id) throws IllegalArgumentException {
+    public Location findLocationById(int id) {
         Optional<Location> location = locationRepository.findById(id);
         if (location.isPresent()) {
             return location.get();
@@ -31,7 +30,7 @@ public class LocationService {
         throw new IllegalArgumentException("Location does not exist. Please try with another location.");
     }
 
-    public Location saveLocation(Location location) throws IllegalArgumentException {
+    public Location saveLocation(Location location) {
         if (LocationValidator.validateLocation(location)) {
             locationRepository.save(location);
             return location;

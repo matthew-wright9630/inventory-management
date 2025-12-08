@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/locations")
@@ -33,6 +34,16 @@ public class LocationController {
         try {
             List<Location> locations = locationService.findAllLocations();
             return new ResponseEntity<>(locations, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Location> getLocationById(@PathVariable int id) {
+        try {
+            Location location = locationService.findLocationById(id);
+            return new ResponseEntity<>(location, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }

@@ -6,9 +6,20 @@ import com.skillstorm.inventory_management_backend.models.Warehouse;
 public class WarehouseValidator {
 
     public static boolean validateWarehouse(Warehouse warehouse) {
+        if (warehouse.getAddressLineTwo() != "") {
+            // if addressLineTwo optional field is added, it should be at least 3 characters
+            // long
+            return (hasThreeCharacters(warehouse.getAddressLineTwo()) && hasThreeCharacters(warehouse.getName())
+                    && notEmptyString(warehouse.getName())
+                    && hasThreeCharacters(warehouse.getAddress()) && notEmptyString(warehouse.getAddress())
+                    && inputIsInteger("" + warehouse.getMaximumCapacity())
+                    && greaterThanZero(warehouse.getMaximumCapacity()) && locationIsNotEmpty(warehouse.getLocation())
+                    && hasThreeCharacters(warehouse.getAddress()) && notEmptyString(warehouse.getAddress()));
+        }
+        // if addressLineTwo optional field is not added, the validation should be
+        // omitted.
         return (hasThreeCharacters(warehouse.getName()) && notEmptyString(warehouse.getName())
                 && hasThreeCharacters(warehouse.getAddress()) && notEmptyString(warehouse.getAddress())
-                && hasThreeCharacters(warehouse.getAddressLineTwo()) && notEmptyString(warehouse.getAddressLineTwo())
                 && inputIsInteger("" + warehouse.getMaximumCapacity())
                 && greaterThanZero(warehouse.getMaximumCapacity()) && locationIsNotEmpty(warehouse.getLocation())
                 && hasThreeCharacters(warehouse.getAddress()) && notEmptyString(warehouse.getAddress()));

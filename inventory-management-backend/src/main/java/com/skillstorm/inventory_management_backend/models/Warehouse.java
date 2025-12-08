@@ -34,7 +34,7 @@ public class Warehouse {
     private String addressLineTwo = "";
 
     @Column(name = "is_active", insertable = false)
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -60,6 +60,13 @@ public class Warehouse {
         // this.location = location;
         // this.storageBins = storageBins;
         // this.warehouseLots = warehouseLots;
+    }
+
+    public Warehouse(String name, int maximumCapacity, String address, boolean isActive) {
+        this.name = name;
+        this.maximumCapacity = maximumCapacity;
+        this.address = address;
+        this.isActive = isActive;
     }
 
     public int getId() {
