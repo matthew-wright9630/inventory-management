@@ -1,6 +1,6 @@
 package com.skillstorm.inventory_management_backend.models;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,7 +30,7 @@ public class LotNumber {
     @Column(name = "date_added", updatable = false)
     @CreationTimestamp
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime dateAdded;
+    private LocalDate dateAdded;
 
     @Column(name = "is_active")
     private Boolean isActive = true;
@@ -38,23 +38,28 @@ public class LotNumber {
     @Column
     private int quantity;
 
+    @Column(name = "manufacture_date")
+    private LocalDate manufactureDate;
+
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @OneToMany(mappedBy = "LotNumber")
+    @OneToMany(mappedBy = "lotNumber")
     @JsonIgnore
-    private Set<LotNumber> lotNumber;
+    private Set<WarehouseLots> warehouseLots;
 
     public LotNumber() {
     }
 
-    public LotNumber(LocalDateTime dateAdded, Boolean isActive, int quantity, Item item, Set<LotNumber> lotNumber) {
+    public LotNumber(LocalDate dateAdded, Boolean isActive, int quantity, LocalDate manufactureDate, Item item,
+            Set<WarehouseLots> warehouseLots) {
         this.dateAdded = dateAdded;
         this.isActive = isActive;
         this.quantity = quantity;
+        this.manufactureDate = manufactureDate;
         this.item = item;
-        this.lotNumber = lotNumber;
+        this.warehouseLots = warehouseLots;
     }
 
     public int getId() {
@@ -65,11 +70,11 @@ public class LotNumber {
         this.id = id;
     }
 
-    public LocalDateTime getDateAdded() {
+    public LocalDate getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(LocalDateTime dateAdded) {
+    public void setDateAdded(LocalDate dateAdded) {
         this.dateAdded = dateAdded;
     }
 
@@ -89,6 +94,14 @@ public class LotNumber {
         this.quantity = quantity;
     }
 
+    public LocalDate getManufactureDate() {
+        return manufactureDate;
+    }
+
+    public void setManufactureDate(LocalDate manufactureDate) {
+        this.manufactureDate = manufactureDate;
+    }
+
     public Item getItem() {
         return item;
     }
@@ -97,12 +110,12 @@ public class LotNumber {
         this.item = item;
     }
 
-    public Set<LotNumber> getLotNumber() {
-        return lotNumber;
+    public Set<WarehouseLots> getWarehouseLots() {
+        return warehouseLots;
     }
 
-    public void setLotNumber(Set<LotNumber> lotNumber) {
-        this.lotNumber = lotNumber;
+    public void setWarehouseLots(Set<WarehouseLots> warehouseLots) {
+        this.warehouseLots = warehouseLots;
     }
 
     @Override
@@ -113,8 +126,9 @@ public class LotNumber {
         result = prime * result + ((dateAdded == null) ? 0 : dateAdded.hashCode());
         result = prime * result + ((isActive == null) ? 0 : isActive.hashCode());
         result = prime * result + quantity;
+        result = prime * result + ((manufactureDate == null) ? 0 : manufactureDate.hashCode());
         result = prime * result + ((item == null) ? 0 : item.hashCode());
-        result = prime * result + ((lotNumber == null) ? 0 : lotNumber.hashCode());
+        result = prime * result + ((warehouseLots == null) ? 0 : warehouseLots.hashCode());
         return result;
     }
 
@@ -141,15 +155,20 @@ public class LotNumber {
             return false;
         if (quantity != other.quantity)
             return false;
+        if (manufactureDate == null) {
+            if (other.manufactureDate != null)
+                return false;
+        } else if (!manufactureDate.equals(other.manufactureDate))
+            return false;
         if (item == null) {
             if (other.item != null)
                 return false;
         } else if (!item.equals(other.item))
             return false;
-        if (lotNumber == null) {
-            if (other.lotNumber != null)
+        if (warehouseLots == null) {
+            if (other.warehouseLots != null)
                 return false;
-        } else if (!lotNumber.equals(other.lotNumber))
+        } else if (!warehouseLots.equals(other.warehouseLots))
             return false;
         return true;
     }
@@ -157,6 +176,6 @@ public class LotNumber {
     @Override
     public String toString() {
         return "LotNumber [id=" + id + ", dateAdded=" + dateAdded + ", isActive=" + isActive + ", quantity=" + quantity
-                + ", item=" + item + "]";
+                + ", manufactureDate=" + manufactureDate + ", item=" + item + "]";
     }
 }

@@ -45,25 +45,16 @@ public class LotNumberController {
         }
     }
 
-    /**
-     * Disabling this method as lot number only accounts for the date the lot was
-     * added.
-     * 
-     * @param id
-     * @return
-     */
-
-    // @PutMapping
-    // public ResponseEntity<LotNumber> updateLotNumber(@RequestBody LotNumber
-    // lotNumber) {
-    // try {
-    // LotNumber newLotNumber = lotNumberService.saveLotNumber(lotNumber);
-    // return new ResponseEntity<LotNumber>(newLotNumber, HttpStatus.OK);
-    // } catch (Exception e) {
-    // return ResponseEntity.internalServerError().header("message",
-    // e.getMessage()).build();
-    // }
-    // }
+    @PutMapping
+    public ResponseEntity<LotNumber> updateLotNumber(@RequestBody LotNumber lotNumber) {
+        try {
+            LotNumber newLotNumber = lotNumberService.saveLotNumber(lotNumber);
+            return new ResponseEntity<LotNumber>(newLotNumber, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message",
+                    e.getMessage()).build();
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLotNumber(@PathVariable int id) {

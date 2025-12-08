@@ -25,7 +25,7 @@ public class Item {
     @JoinColumn(name = "item_detail_id")
     private ItemDetail itemDetail;
 
-    @OneToMany(mappedBy = "Item")
+    @OneToMany(mappedBy = "item")
     @JsonIgnore
     private Set<LotNumber> lotNumbers;
 
