@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface LotNumberRepository extends JpaRepository<LotNumber, Integer> {
 
-    @Query("update LotNumber ln set ln.isActive = :new_isActive where id = :lot_number_id")
+    @Query("update LotNumber lot set lot.isActive = :new_isActive where id = :lot_number_id")
     @Modifying
     @Transactional
     public int deleteLotNumber(@Param("lot_number_id") int id, @Param("new_isActive") boolean active);

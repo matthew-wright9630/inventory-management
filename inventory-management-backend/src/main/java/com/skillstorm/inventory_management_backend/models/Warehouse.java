@@ -31,7 +31,7 @@ public class Warehouse {
     private String address;
 
     @Column(name = "address_two")
-    private String addressLineTwo;
+    private String addressLineTwo = "";
 
     @Column(name = "is_active", insertable = false)
     private Boolean isActive;
@@ -51,16 +51,15 @@ public class Warehouse {
     public Warehouse() {
     }
 
-    public Warehouse(String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive,
-            Location location, Set<StorageBin> storageBins, Set<WarehouseLots> warehouseLots) {
+    public Warehouse(String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive) {
         this.name = name;
         this.maximumCapacity = maximumCapacity;
         this.address = address;
         this.addressLineTwo = addressLineTwo;
         this.isActive = isActive;
-        this.location = location;
-        this.storageBins = storageBins;
-        this.warehouseLots = warehouseLots;
+        // this.location = location;
+        // this.storageBins = storageBins;
+        // this.warehouseLots = warehouseLots;
     }
 
     public int getId() {

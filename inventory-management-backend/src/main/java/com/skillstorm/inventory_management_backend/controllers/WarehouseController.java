@@ -3,6 +3,7 @@ package com.skillstorm.inventory_management_backend.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.inventory_management_backend.models.Warehouse;
+import com.skillstorm.inventory_management_backend.repositories.LocationRepository;
 import com.skillstorm.inventory_management_backend.services.WarehouseService;
 import com.skillstorm.inventory_management_backend.validators.WarehouseValidator;
 
@@ -25,7 +26,7 @@ public class WarehouseController {
 
     private final WarehouseService warehouseService;
 
-    public WarehouseController(WarehouseService warehouseService) {
+    public WarehouseController(WarehouseService warehouseService, LocationRepository locationRepository) {
         this.warehouseService = warehouseService;
     }
 
@@ -58,11 +59,13 @@ public class WarehouseController {
     }
 
     @PostMapping
-    public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse) {
+    public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse, @RequestParam int locationId) {
         try {
             WarehouseValidator.validateWarehouse(warehouse);
-            Warehouse returnedWarehouse = warehouseService.createWarehouse(warehouse);
+            Warehouse returnedWarehouse = warehouseService.createWarehouse(warehouse, locationId);
             return new ResponseEntity<>(returnedWarehouse, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
