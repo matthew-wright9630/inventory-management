@@ -89,6 +89,7 @@ public class LotNumber {
         int result = 1;
         result = prime * result + id;
         result = prime * result + ((dateAdded == null) ? 0 : dateAdded.hashCode());
+        result = prime * result + ((isActive == null) ? 0 : isActive.hashCode());
         result = prime * result + ((items == null) ? 0 : items.hashCode());
         return result;
     }
@@ -109,6 +110,11 @@ public class LotNumber {
                 return false;
         } else if (!dateAdded.equals(other.dateAdded))
             return false;
+        if (isActive == null) {
+            if (other.isActive != null)
+                return false;
+        } else if (!isActive.equals(other.isActive))
+            return false;
         if (items == null) {
             if (other.items != null)
                 return false;
@@ -119,6 +125,6 @@ public class LotNumber {
 
     @Override
     public String toString() {
-        return "LotNumber [id=" + id + ", dateAdded=" + dateAdded + "]";
+        return "LotNumber [id=" + id + ", dateAdded=" + dateAdded + ", isActive=" + isActive + "]";
     }
 }
