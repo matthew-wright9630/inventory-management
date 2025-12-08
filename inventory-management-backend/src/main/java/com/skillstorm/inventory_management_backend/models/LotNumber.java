@@ -13,6 +13,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -33,9 +35,27 @@ public class LotNumber {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
-    @OneToMany(mappedBy = "lotNumber")
+    @Column
+    private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    @OneToMany(mappedBy = "LotNumber")
     @JsonIgnore
-    private Set<Item> items;
+    private Set<LotNumber> lotNumber;
+
+    public LotNumber() {
+    }
+
+    public LotNumber(LocalDateTime dateAdded, Boolean isActive, int quantity, Item item, Set<LotNumber> lotNumber) {
+        this.dateAdded = dateAdded;
+        this.isActive = isActive;
+        this.quantity = quantity;
+        this.item = item;
+        this.lotNumber = lotNumber;
+    }
 
     public int getId() {
         return id;
@@ -53,14 +73,6 @@ public class LotNumber {
         this.dateAdded = dateAdded;
     }
 
-    public Set<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(Set<Item> items) {
-        this.items = items;
-    }
-
     public Boolean getIsActive() {
         return isActive;
     }
@@ -69,18 +81,28 @@ public class LotNumber {
         this.isActive = isActive;
     }
 
-    public LotNumber() {
+    public int getQuantity() {
+        return quantity;
     }
 
-    public LotNumber(int id, LocalDateTime dateAdded, Boolean isActive) {
-        this.id = id;
-        this.dateAdded = dateAdded;
-        this.isActive = isActive;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public LotNumber(LocalDateTime dateAdded, Boolean isActive) {
-        this.dateAdded = dateAdded;
-        this.isActive = isActive;
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public Set<LotNumber> getLotNumber() {
+        return lotNumber;
+    }
+
+    public void setLotNumber(Set<LotNumber> lotNumber) {
+        this.lotNumber = lotNumber;
     }
 
     @Override
@@ -90,7 +112,9 @@ public class LotNumber {
         result = prime * result + id;
         result = prime * result + ((dateAdded == null) ? 0 : dateAdded.hashCode());
         result = prime * result + ((isActive == null) ? 0 : isActive.hashCode());
-        result = prime * result + ((items == null) ? 0 : items.hashCode());
+        result = prime * result + quantity;
+        result = prime * result + ((item == null) ? 0 : item.hashCode());
+        result = prime * result + ((lotNumber == null) ? 0 : lotNumber.hashCode());
         return result;
     }
 
@@ -115,16 +139,24 @@ public class LotNumber {
                 return false;
         } else if (!isActive.equals(other.isActive))
             return false;
-        if (items == null) {
-            if (other.items != null)
+        if (quantity != other.quantity)
+            return false;
+        if (item == null) {
+            if (other.item != null)
                 return false;
-        } else if (!items.equals(other.items))
+        } else if (!item.equals(other.item))
+            return false;
+        if (lotNumber == null) {
+            if (other.lotNumber != null)
+                return false;
+        } else if (!lotNumber.equals(other.lotNumber))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "LotNumber [id=" + id + ", dateAdded=" + dateAdded + ", isActive=" + isActive + "]";
+        return "LotNumber [id=" + id + ", dateAdded=" + dateAdded + ", isActive=" + isActive + ", quantity=" + quantity
+                + ", item=" + item + "]";
     }
 }
