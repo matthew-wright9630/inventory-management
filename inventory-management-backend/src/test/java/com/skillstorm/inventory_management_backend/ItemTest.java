@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.skillstorm.inventory_management_backend.models.ItemDetail;
 import com.skillstorm.inventory_management_backend.models.LotNumber;
 import com.skillstorm.inventory_management_backend.models.StorageBin;
-import com.skillstorm.inventory_management_backend.validators.WarehouseValidator;
+import com.skillstorm.inventory_management_backend.validators.ItemValidator;
 
 public class ItemTest {
 
@@ -24,35 +24,35 @@ public class ItemTest {
     @DisplayName("StorageBin is not empty")
     public void testStorageBinIsNotEmpty() {
         assertThrows(NullPointerException.class, () -> {
-            WarehouseValidator.storageBinIsNotEmpty(null);
+            ItemValidator.storageBinIsNotEmpty(null);
         });
         StorageBin storageBin = new StorageBin();
-        assertFalse(WarehouseValidator.storageBinIsNotEmpty(storageBin));
+        assertFalse(ItemValidator.storageBinIsNotEmpty(storageBin));
         storageBin.setId(5);
-        assertTrue(WarehouseValidator.storageBinIsNotEmpty(storageBin));
+        assertTrue(ItemValidator.storageBinIsNotEmpty(storageBin));
     }
 
     @Test
     @DisplayName("LotNumber is not empty")
     public void testLotNumberIsNotEmpty() {
         assertThrows(NullPointerException.class, () -> {
-            WarehouseValidator.lotNumberIsNotEmpty(null);
+            ItemValidator.lotNumberIsNotEmpty(null);
         });
         LotNumber lotNumber = new LotNumber();
-        assertFalse(WarehouseValidator.lotNumberIsNotEmpty(lotNumber));
+        assertFalse(ItemValidator.lotNumberIsNotEmpty(lotNumber));
         lotNumber.setId(5);
-        assertTrue(WarehouseValidator.lotNumberIsNotEmpty(lotNumber));
+        assertTrue(ItemValidator.lotNumberIsNotEmpty(lotNumber));
     }
 
     @Test
     @DisplayName("ItemDetail is not empty")
     public void testItemDetailIsNotEmpty() {
         assertThrows(NullPointerException.class, () -> {
-            WarehouseValidator.itemDetailIsNotEmpty(null);
+            ItemValidator.itemDetailIsNotEmpty(null);
         });
         ItemDetail itemDetail = new ItemDetail();
-        assertFalse(WarehouseValidator.itemDetailIsNotEmpty(itemDetail));
+        assertFalse(ItemValidator.itemDetailIsNotEmpty(itemDetail));
         itemDetail.setId(5);
-        assertTrue(WarehouseValidator.itemDetailIsNotEmpty(itemDetail));
+        assertTrue(ItemValidator.itemDetailIsNotEmpty(itemDetail));
     }
 }
