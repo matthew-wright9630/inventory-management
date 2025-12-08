@@ -34,9 +34,4 @@ public class WarehouseLotsService {
         warehouseLotsRepository.save(warehouseLots);
         return warehouseLots;
     }
-
-    public WarehouseLots deleteWarehouseLots(WarehouseLots warehouseLots) {
-        warehouseLotsRepository.deleteWarehouseLots(warehouseLots.getId(), false);
-        return warehouseLots;
-    }
 }
