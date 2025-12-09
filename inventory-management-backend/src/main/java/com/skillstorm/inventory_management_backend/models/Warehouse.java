@@ -46,7 +46,7 @@ public class Warehouse {
 
     @OneToMany(mappedBy = "warehouse")
     @JsonIgnore
-    private Set<WarehouseLots> warehouseLots;
+    private Set<WarehouseLot> warehouseLots;
 
     public Warehouse() {
     }
@@ -128,11 +128,11 @@ public class Warehouse {
         this.storageBins = storageBins;
     }
 
-    public Set<WarehouseLots> getWarehouseLots() {
+    public Set<WarehouseLot> getWarehouseLots() {
         return warehouseLots;
     }
 
-    public void setWarehouseLots(Set<WarehouseLots> warehouseLots) {
+    public void setWarehouseLots(Set<WarehouseLot> warehouseLots) {
         this.warehouseLots = warehouseLots;
     }
 

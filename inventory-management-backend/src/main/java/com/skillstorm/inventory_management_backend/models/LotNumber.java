@@ -49,7 +49,7 @@ public class LotNumber {
 
     @OneToMany(mappedBy = "lotNumber")
     @JsonIgnore
-    private Set<WarehouseLots> warehouseLots;
+    private Set<WarehouseLot> warehouseLots;
 
     public LotNumber() {
     }
@@ -104,11 +104,11 @@ public class LotNumber {
         this.item = item;
     }
 
-    public Set<WarehouseLots> getWarehouseLots() {
+    public Set<WarehouseLot> getWarehouseLots() {
         return warehouseLots;
     }
 
-    public void setWarehouseLots(Set<WarehouseLots> warehouseLots) {
+    public void setWarehouseLots(Set<WarehouseLot> warehouseLots) {
         this.warehouseLots = warehouseLots;
     }
 

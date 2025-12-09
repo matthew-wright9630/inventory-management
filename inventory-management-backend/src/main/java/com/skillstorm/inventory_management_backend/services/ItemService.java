@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.util.InternalException;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.skillstorm.inventory_management_backend.models.Item;
 import com.skillstorm.inventory_management_backend.models.ItemDetail;
@@ -12,7 +12,7 @@ import com.skillstorm.inventory_management_backend.models.StorageBin;
 import com.skillstorm.inventory_management_backend.repositories.ItemRepository;
 import com.skillstorm.inventory_management_backend.validators.ItemValidator;
 
-@RestController
+@Service
 public class ItemService {
 
     private final ItemRepository itemsRepository;
@@ -47,7 +47,7 @@ public class ItemService {
         if (ItemValidator.validateItem(item)) {
             return itemsRepository.save(item);
         }
-        throw new InternalException("Item was not able to be created");
+        throw new IllegalArgumentException("Item was not able to be created");
     }
 
     public Item saveItem(Item item) {

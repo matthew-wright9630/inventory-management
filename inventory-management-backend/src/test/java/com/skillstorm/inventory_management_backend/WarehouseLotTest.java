@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.skillstorm.inventory_management_backend.models.LotNumber;
 import com.skillstorm.inventory_management_backend.models.Warehouse;
-import com.skillstorm.inventory_management_backend.validators.WarehouseLotsValidator;
+import com.skillstorm.inventory_management_backend.validators.WarehouseLotValidator;
 
-public class WarehouseLotsTest {
+public class WarehouseLotTest {
 
     /**
      * A warehouse lot must be linked to a lot number.
@@ -22,36 +22,36 @@ public class WarehouseLotsTest {
     @DisplayName("Warehouse is not empty")
     public void testWarehouseIsNotEmpty() {
         assertThrows(NullPointerException.class, () -> {
-            WarehouseLotsValidator.warehouseIsNotEmpty(null);
+            WarehouseLotValidator.warehouseIsNotEmpty(null);
         });
         Warehouse warehouse = new Warehouse();
-        assertFalse(WarehouseLotsValidator.warehouseIsNotEmpty(warehouse));
+        assertFalse(WarehouseLotValidator.warehouseIsNotEmpty(warehouse));
         warehouse.setId(5);
-        assertTrue(WarehouseLotsValidator.warehouseIsNotEmpty(warehouse));
+        assertTrue(WarehouseLotValidator.warehouseIsNotEmpty(warehouse));
     }
 
     @Test
     @DisplayName("Warehouse is active")
     public void testWarehouseIsactive() {
         Warehouse warehouse = new Warehouse();
-        warehouse.setIsActive(false);
+        warehouse.setActive(false);
         assertThrows(IllegalArgumentException.class, () -> {
-            WarehouseLotsValidator.warehouseIsActive(warehouse);
+            WarehouseLotValidator.warehouseIsActive(warehouse);
         });
-        warehouse.setIsActive(true);
-        assertTrue(WarehouseLotsValidator.warehouseIsActive(warehouse));
+        warehouse.setActive(true);
+        assertTrue(WarehouseLotValidator.warehouseIsActive(warehouse));
     }
 
     @Test
     @DisplayName("LotNumber is not empty")
     public void testLotNumberIsNotEmpty() {
         assertThrows(NullPointerException.class, () -> {
-            WarehouseLotsValidator.lotNumberIsNotEmpty(null);
+            WarehouseLotValidator.lotNumberIsNotEmpty(null);
         });
         LotNumber lotNumber = new LotNumber();
-        assertFalse(WarehouseLotsValidator.lotNumberIsNotEmpty(lotNumber));
+        assertFalse(WarehouseLotValidator.lotNumberIsNotEmpty(lotNumber));
         lotNumber.setId(5);
-        assertTrue(WarehouseLotsValidator.lotNumberIsNotEmpty(lotNumber));
+        assertTrue(WarehouseLotValidator.lotNumberIsNotEmpty(lotNumber));
     }
 
     @Test
@@ -60,9 +60,9 @@ public class WarehouseLotsTest {
         LotNumber lotNumber = new LotNumber();
         lotNumber.setIsActive(false);
         assertThrows(IllegalArgumentException.class, () -> {
-            WarehouseLotsValidator.lotNumberIsActive(lotNumber);
+            WarehouseLotValidator.lotNumberIsActive(lotNumber);
         });
         lotNumber.setIsActive(true);
-        assertTrue(WarehouseLotsValidator.lotNumberIsActive(lotNumber));
+        assertTrue(WarehouseLotValidator.lotNumberIsActive(lotNumber));
     }
 }
