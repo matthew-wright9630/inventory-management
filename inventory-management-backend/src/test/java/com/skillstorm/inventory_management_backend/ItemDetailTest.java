@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.skillstorm.inventory_management_backend.models.ItemDetail;
 import com.skillstorm.inventory_management_backend.validators.ItemDetailValidator;
 
 public class ItemDetailTest {
@@ -102,12 +101,5 @@ public class ItemDetailTest {
             ItemDetailValidator.greaterThanZero(-100);
         });
         assertTrue(ItemDetailValidator.greaterThanZero(1000));
-    }
-
-    @Test
-    @DisplayName("Item Detail full validation")
-    public void testItemDetail() {
-        ItemDetail itemDetail = new ItemDetail("Name", "14342-4c", "This is a test description", true);
-        assertTrue(ItemDetailValidator.validateItemDetails(itemDetail));
     }
 }

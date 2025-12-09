@@ -23,26 +23,37 @@ public class ItemDetailService {
     }
 
     public ItemDetail findItemDetailById(int id) {
-        Optional<ItemDetail> ItemDetailsBin = itemDetailsRepository.findById(id);
+        Optional<ItemDetail> itemDetails = itemDetailsRepository.findById(id);
 
-        if (ItemDetailsBin.isPresent()) {
-            return ItemDetailsBin.get();
+        if (itemDetails.isPresent()) {
+            return itemDetails.get();
         }
-        return null;
+        throw new IllegalArgumentException("Item Details does not exist. Please try with another item detail.");
     }
 
-    public ItemDetail createItemDetail(ItemDetail itemDetails) {
-        ItemDetailValidator.validateItemDetails(itemDetails);
-        return itemDetailsRepository.save(itemDetails);
+    public ItemDetail createItemDetail(ItemDetail itemDetail) {
+        if (ItemDetailValidator.validateItemDetails(itemDetail)) {
+            return itemDetailsRepository.save(itemDetail);
+        }
+        throw new IllegalArgumentException("Values were not input as expected. input: " + itemDetail);
     }
 
-    public ItemDetail saveItemDetail(ItemDetail itemDetails) {
-        itemDetailsRepository.save(itemDetails);
-        return itemDetails;
+    public ItemDetail saveItemDetail(ItemDetail itemDetail) {
+        ItemDetail foundItemDetail = findItemDetailById(itemDetail.getId());
+        if (foundItemDetail.getId() <= 0) {
+            throw new IllegalArgumentException("Item Details does not exist.");
+        }
+        if (ItemDetailValidator.validateItemDetails(itemDetail)) {
+            return itemDetailsRepository.save(itemDetail);
+        }
+        throw new IllegalArgumentException("Validation failed. Please try again with different inputs.");
     }
 
-    public ItemDetail deleteItemDetail(ItemDetail itemDetails) {
-        itemDetailsRepository.deleteItemDetails(itemDetails.getId(), false);
-        return itemDetails;
+    public int deleteItemDetail(int id) {
+        ItemDetail foundItemDetail = findItemDetailById(id);
+        if (foundItemDetail.getId() <= 0) {
+            throw new IllegalArgumentException("Item Details does not exist.");
+        }
+        return itemDetailsRepository.deleteItemDetails(id, false);
     }
 }

@@ -5,8 +5,8 @@ import com.skillstorm.inventory_management_backend.models.ItemDetail;
 public class ItemDetailValidator {
 
     public static boolean validateItemDetails(ItemDetail itemDetails) {
-        return (hasThreeCharacters(itemDetails.getName()) && notEmptyString(itemDetails.getName()) &&
-                hasThreeCharacters(itemDetails.getDescription()) && notEmptyString(itemDetails.getDescription()) &&
+        return (notEmptyString(itemDetails.getName()) && hasThreeCharacters(itemDetails.getName()) &&
+                notEmptyString(itemDetails.getDescription()) && hasThreeCharacters(itemDetails.getDescription()) &&
                 notEmptyString(itemDetails.getSku()) && inputIsInteger("" + itemDetails.getShelfLife())
                 && greaterThanZero(itemDetails.getShelfLife()));
     }

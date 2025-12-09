@@ -32,6 +32,8 @@ public class ItemDetailController {
         try {
             List<ItemDetail> itemDetails = itemDetailService.findAllItemDetails();
             return new ResponseEntity<>(itemDetails, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
@@ -40,8 +42,10 @@ public class ItemDetailController {
     @PostMapping
     public ResponseEntity<ItemDetail> createItemDetail(@RequestBody ItemDetail itemDetail) {
         try {
-            ItemDetailValidator.validateItemDetails(itemDetail);
-            return new ResponseEntity<>(itemDetailService.saveItemDetail(itemDetail), HttpStatus.CREATED);
+            ItemDetail newItemDetail = itemDetailService.createItemDetail(itemDetail);
+            return new ResponseEntity<>(newItemDetail, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
@@ -50,9 +54,10 @@ public class ItemDetailController {
     @PutMapping
     public ResponseEntity<ItemDetail> updateItemDetail(@RequestBody ItemDetail itemDetail) {
         try {
-            ItemDetailValidator.validateItemDetails(itemDetail);
             ItemDetail newItemDetail = itemDetailService.saveItemDetail(itemDetail);
             return new ResponseEntity<ItemDetail>(newItemDetail, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
@@ -61,9 +66,10 @@ public class ItemDetailController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItemDetail(@PathVariable int id) {
         try {
-            ItemDetail itemDetail = itemDetailService.findItemDetailById(id);
-            itemDetailService.deleteItemDetail(itemDetail);
+            itemDetailService.deleteItemDetail(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
