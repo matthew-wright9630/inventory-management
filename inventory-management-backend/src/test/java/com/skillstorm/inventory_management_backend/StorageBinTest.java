@@ -36,6 +36,18 @@ public class StorageBinTest {
     }
 
     @Test
+    @DisplayName("Warehouse is active")
+    public void testWarehouseIsactive() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.setActive(false);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StorageBinValidator.warehouseIsActive(warehouse);
+        });
+        warehouse.setActive(true);
+        assertTrue(StorageBinValidator.warehouseIsActive(warehouse));
+    }
+
+    @Test
     @DisplayName("Storage bin location is not empty")
     public void testStorageBinLocationIsNotEmpty() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -47,21 +59,21 @@ public class StorageBinTest {
     @Test
     @DisplayName("Storage bins that share a warehouse are not able to share a storage location.")
     public void testStorageBinDoesNotShareLocationWithActiveStorageBin() {
-        List<String> locations = new ArrayList<>();
-        locations.add("1A");
-        locations.add("1B");
+        List<StorageBin> activeStorageBins = new ArrayList<>();
         StorageBin storageBin1 = new StorageBin();
         storageBin1.setStorageLocation("1B");
         StorageBin storageBin2 = new StorageBin();
         storageBin2.setStorageLocation("1A");
         StorageBin storageBin3 = new StorageBin();
         storageBin3.setStorageLocation("1C");
+        activeStorageBins.add(storageBin1);
+        activeStorageBins.add(storageBin2);
         assertThrows(IllegalArgumentException.class, () -> {
-            StorageBinValidator.storageBinLocationIsUnique(locations, storageBin1);
+            StorageBinValidator.storageBinLocationIsUnique(activeStorageBins, storageBin1);
         });
         assertThrows(IllegalArgumentException.class, () -> {
-            StorageBinValidator.storageBinLocationIsUnique(locations, storageBin2);
+            StorageBinValidator.storageBinLocationIsUnique(activeStorageBins, storageBin2);
         });
-        assertTrue(StorageBinValidator.storageBinLocationIsUnique(locations, storageBin3));
+        assertTrue(StorageBinValidator.storageBinLocationIsUnique(activeStorageBins, storageBin3));
     }
 }

@@ -24,22 +24,14 @@ public class StorageBin {
     private String storageLocation;
 
     @Column(name = "is_active", insertable = false)
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     public StorageBin() {
     }
 
-    public StorageBin(int id, Warehouse warehouse, String storageLocation, boolean isActive) {
-        this.id = id;
+    public StorageBin(Warehouse warehouse, String storageLocation) {
         this.warehouse = warehouse;
         this.storageLocation = storageLocation;
-        this.isActive = isActive;
-    }
-
-    public StorageBin(Warehouse warehouse, String storageLocation, boolean isActive) {
-        this.warehouse = warehouse;
-        this.storageLocation = storageLocation;
-        this.isActive = isActive;
     }
 
     public int getId() {

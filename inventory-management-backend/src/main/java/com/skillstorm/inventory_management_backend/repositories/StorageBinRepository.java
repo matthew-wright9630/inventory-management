@@ -9,14 +9,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skillstorm.inventory_management_backend.models.StorageBin;
-import com.skillstorm.inventory_management_backend.models.Warehouse;
 
 import jakarta.transaction.Transactional;
 
 @Repository
 public interface StorageBinRepository extends JpaRepository<StorageBin, Integer> {
 
-    List<StorageBin> findByWarehouseIdAndIsActive(Warehouse warehouse, Boolean isActive);
+    List<StorageBin> findByWarehouseIdAndIsActive(int warehouseId, Boolean isActive);
 
     @Query("update StorageBin bin set bin.isActive = :new_isActive where id = :storage_bin_id")
     @Modifying

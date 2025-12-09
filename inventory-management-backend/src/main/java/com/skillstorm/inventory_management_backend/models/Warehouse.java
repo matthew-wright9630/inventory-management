@@ -51,22 +51,17 @@ public class Warehouse {
     public Warehouse() {
     }
 
-    public Warehouse(String name, int maximumCapacity, String address, String addressLineTwo, boolean isActive) {
+    public Warehouse(String name, int maximumCapacity, String address, String addressLineTwo) {
         this.name = name;
         this.maximumCapacity = maximumCapacity;
         this.address = address;
         this.addressLineTwo = addressLineTwo;
-        this.isActive = isActive;
-        // this.location = location;
-        // this.storageBins = storageBins;
-        // this.warehouseLots = warehouseLots;
     }
 
-    public Warehouse(String name, int maximumCapacity, String address, boolean isActive) {
+    public Warehouse(String name, int maximumCapacity, String address) {
         this.name = name;
         this.maximumCapacity = maximumCapacity;
         this.address = address;
-        this.isActive = isActive;
     }
 
     public int getId() {

@@ -7,10 +7,10 @@ import com.skillstorm.inventory_management_backend.models.Warehouse;
 
 public class StorageBinValidator {
 
-    public static boolean validateStorageBin(StorageBin storageBin, List<String> activeLocations) {
+    public static boolean validateStorageBin(StorageBin storageBin, List<StorageBin> activeStorageBins) {
         return (notEmptyString(storageBin.getStorageLocation())
                 && warehouseIsNotEmpty(storageBin.getWarehouse())
-                && storageBinLocationIsUnique(activeLocations, storageBin));
+                && storageBinLocationIsUnique(activeStorageBins, storageBin));
     }
 
     public static boolean notEmptyString(String input) {
@@ -35,18 +35,25 @@ public class StorageBinValidator {
         }
     }
 
-    public static boolean storageBinLocationIsUnique(List<String> storageLocationArray, StorageBin storageBin2) {
-        String newStorageLocation = storageBin2.getStorageLocation();
+    public static boolean storageBinLocationIsUnique(List<StorageBin> activeStorageBins, StorageBin newStorageBin) {
         try {
-            for (String s : storageLocationArray) {
-                if (s.equals(newStorageLocation)) {
+            for (StorageBin bin : activeStorageBins) {
+                if (bin.getStorageLocation().equals(newStorageBin.getStorageLocation())) {
                     throw new IllegalArgumentException(
-                            "There is already a storage bin at this location. Please select a different location.");
+                            "There is already a storage bin at this location. Please select a different storage location");
                 }
             }
             return true;
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public static boolean warehouseIsActive(Warehouse warehouse) {
+        if (warehouse.isActive()) {
+            return true;
+        }
+        throw new IllegalArgumentException(
+                "Cannot place storage bin in an inactive warehouse. Please select an active warehouse.");
     }
 }

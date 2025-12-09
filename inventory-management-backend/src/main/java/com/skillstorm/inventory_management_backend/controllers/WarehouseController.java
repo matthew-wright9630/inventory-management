@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.skillstorm.inventory_management_backend.models.Warehouse;
 import com.skillstorm.inventory_management_backend.repositories.LocationRepository;
 import com.skillstorm.inventory_management_backend.services.WarehouseService;
-import com.skillstorm.inventory_management_backend.validators.WarehouseValidator;
 
 import java.util.List;
 

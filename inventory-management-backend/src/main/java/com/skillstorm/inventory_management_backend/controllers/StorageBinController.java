@@ -11,24 +11,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.inventory_management_backend.models.StorageBin;
-import com.skillstorm.inventory_management_backend.models.Warehouse;
 import com.skillstorm.inventory_management_backend.services.StorageBinService;
-import com.skillstorm.inventory_management_backend.services.WarehouseService;
-import com.skillstorm.inventory_management_backend.validators.StorageBinValidator;
 
 @RestController
 @RequestMapping("/storage-bin")
 public class StorageBinController {
 
     private final StorageBinService storageBinService;
-    private final WarehouseService warehouseService;
 
-    public StorageBinController(StorageBinService storageBinService, WarehouseService warehouseService) {
+    public StorageBinController(StorageBinService storageBinService) {
         this.storageBinService = storageBinService;
-        this.warehouseService = warehouseService;
     }
 
     @GetMapping
@@ -36,20 +32,33 @@ public class StorageBinController {
         try {
             List<StorageBin> storageBins = storageBinService.findAllStorageBins();
             return new ResponseEntity<>(storageBins, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
+    }
+
+    @GetMapping("/warehouse/{warehouseId}")
+    public ResponseEntity<List<StorageBin>> getAllActiveStorageBins(@PathVariable int warehouseId) {
+        try {
+            List<StorageBin> storageBins = storageBinService.findAllActiveStorageBinLocationsInWarehouse(warehouseId);
+            return new ResponseEntity<>(storageBins, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<StorageBin> createStorageBin(@RequestBody StorageBin storageBin) {
+    public ResponseEntity<StorageBin> createStorageBin(@RequestBody StorageBin storageBin,
+            @RequestParam int warehouseId) {
         try {
-            Warehouse warehouse = warehouseService.findWarehouseById(storageBin.getWarehouse().getId());
-            List<String> activeLocations = storageBinService.findAllActiveStorageBinLocationsInWarehouse(warehouse);
-            StorageBinValidator.validateStorageBin(storageBin, activeLocations);
-
-            StorageBin createdStorageBin = storageBinService.createStorageBin(storageBin);
+            StorageBin createdStorageBin = storageBinService.createStorageBin(storageBin, warehouseId);
             return new ResponseEntity<>(createdStorageBin, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
@@ -58,12 +67,10 @@ public class StorageBinController {
     @PutMapping
     public ResponseEntity<StorageBin> updateStorageBin(@RequestBody StorageBin storageBin) {
         try {
-            Warehouse warehouse = warehouseService.findWarehouseById(storageBin.getWarehouse().getId());
-            List<String> activeLocations = storageBinService.findAllActiveStorageBinLocationsInWarehouse(warehouse);
-            StorageBinValidator.validateStorageBin(storageBin, activeLocations);
-
-            StorageBin updatedStorageBin = storageBinService.saveStorageBin(storageBin);
+            StorageBin updatedStorageBin = storageBinService.updateStorageBin(storageBin);
             return new ResponseEntity<>(updatedStorageBin, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
@@ -72,9 +79,10 @@ public class StorageBinController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStorageBin(@PathVariable int id) {
         try {
-            StorageBin storageBin = storageBinService.findStorageBinById(id);
-            storageBinService.deleteStorageBin(storageBin);
+            storageBinService.deleteStorageBin(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
