@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.inventory_management_backend.models.Item;
 import com.skillstorm.inventory_management_backend.services.ItemService;
-import com.skillstorm.inventory_management_backend.validators.ItemValidator;
 
 @RestController
 @RequestMapping("/items")
@@ -32,27 +32,33 @@ public class ItemController {
         try {
             List<Item> items = itemService.findAllItems();
             return new ResponseEntity<>(items, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
+    public ResponseEntity<Item> createItem(@RequestBody Item item, @RequestParam int storageBinId,
+            @RequestParam int itemDetailId) {
         try {
-            ItemValidator.validateItem(item);
-            return new ResponseEntity<>(itemService.saveItem(item), HttpStatus.CREATED);
+
+            return new ResponseEntity<>(itemService.createItem(item, storageBinId, itemDetailId), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+            return ResponseEntity.internalServerError().header("message", "itemDetailId:" + itemDetailId).build();
         }
     }
 
     @PutMapping
     public ResponseEntity<Item> updateItem(@RequestBody Item item) {
         try {
-            ItemValidator.validateItem(item);
             Item newItem = itemService.saveItem(item);
             return new ResponseEntity<Item>(newItem, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
@@ -61,9 +67,10 @@ public class ItemController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable int id) {
         try {
-            Item item = itemService.findItemById(id);
-            itemService.deleteItem(item);
+            itemService.deleteItem(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }

@@ -39,6 +39,18 @@ public class StorageBinController {
         }
     }
 
+    @GetMapping("/bin")
+    public ResponseEntity<StorageBin> getStorageBin(@RequestParam int id) {
+        try {
+            StorageBin storageBin = storageBinService.findStorageBinById(id);
+            return new ResponseEntity<>(storageBin, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
+    }
+
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<StorageBin>> getAllActiveStorageBins(@PathVariable int warehouseId) {
         try {

@@ -34,11 +34,11 @@ public class ItemTest {
     @DisplayName("StorageBin is active")
     public void testStorageBinIsactive() {
         StorageBin storageBin = new StorageBin();
-        storageBin.setActive(false);
+        storageBin.setIsActive(false);
         assertThrows(IllegalArgumentException.class, () -> {
             ItemValidator.storageBinIsActive(storageBin);
         });
-        storageBin.setActive(true);
+        storageBin.setIsActive(true);
         assertTrue(ItemValidator.storageBinIsActive(storageBin));
     }
 

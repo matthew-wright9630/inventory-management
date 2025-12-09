@@ -39,10 +39,9 @@ public class Item {
     public Item() {
     }
 
-    public Item(ItemDetail itemDetail, StorageBin storageBin, Boolean isActive) {
+    public Item(ItemDetail itemDetail, StorageBin storageBin) {
         this.itemDetail = itemDetail;
         this.storageBin = storageBin;
-        this.isActive = isActive;
     }
 
     public int getId() {

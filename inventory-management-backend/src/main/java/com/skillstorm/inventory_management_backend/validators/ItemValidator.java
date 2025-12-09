@@ -9,7 +9,8 @@ public class ItemValidator {
 
     public static boolean validateItem(Item item) {
         return (storageBinIsNotEmpty(item.getStorageBin())
-                && itemDetailIsNotEmpty(item.getItemDetail()));
+                && itemDetailIsNotEmpty(item.getItemDetail()) && storageBinIsActive(item.getStorageBin())
+                && itemDetailIsActive(item.getItemDetail()));
     }
 
     public static boolean storageBinIsNotEmpty(StorageBin storageBin) {
@@ -52,7 +53,7 @@ public class ItemValidator {
     }
 
     public static boolean storageBinIsActive(StorageBin storageBin) {
-        if (storageBin.isActive()) {
+        if (storageBin.getIsActive()) {
             return true;
         }
         throw new IllegalArgumentException(
