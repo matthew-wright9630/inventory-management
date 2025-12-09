@@ -50,4 +50,20 @@ public class ItemValidator {
             throw e;
         }
     }
+
+    public static boolean storageBinIsActive(StorageBin storageBin) {
+        if (storageBin.isActive()) {
+            return true;
+        }
+        throw new IllegalArgumentException(
+                "Cannot place storage bin in an inactive warehouse. Please select an active warehouse.");
+    }
+
+    public static boolean itemDetailIsActive(ItemDetail itemDetail) {
+        if (itemDetail.getIsActive()) {
+            return true;
+        }
+        throw new IllegalArgumentException(
+                "Cannot place storage bin in an inactive warehouse. Please select an active warehouse.");
+    }
 }

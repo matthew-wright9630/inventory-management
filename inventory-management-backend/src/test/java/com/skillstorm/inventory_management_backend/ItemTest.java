@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.skillstorm.inventory_management_backend.models.ItemDetail;
-import com.skillstorm.inventory_management_backend.models.LotNumber;
 import com.skillstorm.inventory_management_backend.models.StorageBin;
 import com.skillstorm.inventory_management_backend.validators.ItemValidator;
 
@@ -16,7 +15,6 @@ public class ItemTest {
 
     /**
      * An item must be linked to a storage bin.
-     * An item must be linked to a lot number.
      * An item must be linked to an item detail.
      */
 
@@ -33,15 +31,15 @@ public class ItemTest {
     }
 
     @Test
-    @DisplayName("LotNumber is not empty")
-    public void testLotNumberIsNotEmpty() {
-        assertThrows(NullPointerException.class, () -> {
-            ItemValidator.lotNumberIsNotEmpty(null);
+    @DisplayName("StorageBin is active")
+    public void testStorageBinIsactive() {
+        StorageBin storageBin = new StorageBin();
+        storageBin.setActive(false);
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemValidator.storageBinIsActive(storageBin);
         });
-        LotNumber lotNumber = new LotNumber();
-        assertFalse(ItemValidator.lotNumberIsNotEmpty(lotNumber));
-        lotNumber.setId(5);
-        assertTrue(ItemValidator.lotNumberIsNotEmpty(lotNumber));
+        storageBin.setActive(true);
+        assertTrue(ItemValidator.storageBinIsActive(storageBin));
     }
 
     @Test
@@ -55,4 +53,17 @@ public class ItemTest {
         itemDetail.setId(5);
         assertTrue(ItemValidator.itemDetailIsNotEmpty(itemDetail));
     }
+
+    @Test
+    @DisplayName("ItemDetail is active")
+    public void testItemDetailIsactive() {
+        ItemDetail itemDetail = new ItemDetail();
+        itemDetail.setIsActive(false);
+        assertThrows(IllegalArgumentException.class, () -> {
+            ItemValidator.itemDetailIsActive(itemDetail);
+        });
+        itemDetail.setIsActive(true);
+        assertTrue(ItemValidator.itemDetailIsActive(itemDetail));
+    }
+
 }

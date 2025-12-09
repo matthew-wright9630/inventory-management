@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.inventory_management_backend.models.ItemDetail;
 import com.skillstorm.inventory_management_backend.services.ItemDetailService;
-import com.skillstorm.inventory_management_backend.validators.ItemDetailValidator;
 
 @RestController
 @RequestMapping("/item-detail")
