@@ -1,8 +1,13 @@
-const URL = "http://localhost:8080";
-let warehouses = [];
-let storageBins = [];
+import {
+    getAllWarehousesAndStorageBins,
+    getActiveStorageBinsInWarehouse,
+} from "./api.js";
 
-function getWarehouse() {
+document
+    .getElementById("warehouse-test")
+    .addEventListener("click", getWarehouseDetails);
+
+function getWarehouseDetails() {
     getAllWarehousesAndStorageBins().then((warehouseList) => {
         warehouseList.map((warehouse) => {
             getActiveStorageBinsInWarehouse(warehouse.id).then(
@@ -22,12 +27,19 @@ function addWarehouseToList(newWarehouse, activeStorageBins) {
     let capacityEl = document.createElement("p");
     let maxCapacityEl = document.createElement("p");
 
-    warehouseDiv.classList.add("col-6", "border", "rounded");
+    warehouseDiv.classList.add(
+        "col-4",
+        "border",
+        "rounded",
+        "warehouse-card",
+        "bg-primary"
+    );
+    warehouseDiv.id = `warehouse-${newWarehouse.id}`;
     titleEl.innerText = newWarehouse.name;
     addressEl.innerText = `${newWarehouse.address} ${
         newWarehouse.addressLineTwo
-    }, ${newWarehouse.location.stateOrRegion || ""}, ${
-        newWarehouse.location.country
+    }, ${newWarehouse.location?.stateOrRegion ?? ""}, ${
+        newWarehouse.location?.country ?? ""
     }`;
     maxCapacityEl.innerText =
         "Maximum capacity: " + newWarehouse.maximumCapacity;
@@ -39,38 +51,9 @@ function addWarehouseToList(newWarehouse, activeStorageBins) {
     warehouseDiv.appendChild(maxCapacityEl);
 
     document.getElementById("warehouse-list").appendChild(warehouseDiv);
-}
-
-function getAllWarehousesAndStorageBins() {
-    return fetch(URL + "/warehouses", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
-        .then((res) => {
-            return res.json();
-        })
-        .catch((err) => {
-            console.error(err);
+    document
+        .getElementById(`warehouse-${newWarehouse.id}`)
+        .addEventListener("click", () => {
+            console.log(newWarehouse);
         });
 }
-
-function getActiveStorageBinsInWarehouse(warehouseId) {
-    return fetch(`${URL}/storage-bin/warehouse/${warehouseId}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
-        .then((res) => {
-            return res.json();
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-}
-
-document
-    .getElementById("warehouse-test")
-    .addEventListener("click", getWarehouse);
