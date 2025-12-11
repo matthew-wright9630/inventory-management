@@ -189,6 +189,63 @@ function createWarehouse(
         .catch((err) => console.error(err));
 }
 
+function createStorageBin(warehouseId, storageLocation) {
+    const storageBinData = {
+        storageLocation: storageLocation,
+    };
+    return fetch(`${URL}/storage-bins/$warehouseId=${warehouseId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(storageBinData),
+    });
+}
+
+function createItemDetails(name, sku, description, shelfLife) {
+    const itemDetailData = {
+        name: name,
+        sku: sku,
+        description: description,
+        shelfLife: shelfLife,
+    };
+    return fetch(`${URL}/item-details`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(itemDetailData),
+    });
+}
+
+function createLot(quantity, itemId, manufacturedDate) {
+    const lotNumberData = {
+        quantity: quantity,
+        manufacturedDate: manufacturedDate,
+    };
+    return fetch(`${URL}/lot-numbers/$itemId=${itemId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(lotNumberData),
+    });
+}
+
+function createItem(storageBinId, itemDetailId) {
+    const itemData = {};
+    return fetch(
+        `${URL}/items?storageBinId=${storageBinId}&itemDetailId=${itemDetailId}`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(itemData),
+        }
+    );
+}
+
 export {
     getAllWarehouses,
     getActiveStorageBinsInWarehouse,
@@ -200,4 +257,8 @@ export {
     getItemsByStorageId,
     createLocation,
     createWarehouse,
+    createStorageBin,
+    createItemDetails,
+    createItem,
+    createLot,
 };

@@ -11,18 +11,18 @@ import {
     createWarehouse,
 } from "./api.js";
 
+let listOfWarehouses = [];
 let listOfItems = [];
+let listOfActiveBins = [];
 
-// document
-//     .getElementById("warehouse-test")
-//     .addEventListener("click", getWarehouseDetails);
+let itemWarehouseSelect = document.getElementById("item-warehouse-select");
+let itemSubmitButton = document.getElementById("create-item-submit");
 
 export function getWarehouseDetails() {
     getAllWarehouses().then((warehouseList) => {
         warehouseList.map((warehouse) => {
             getActiveStorageBinsInWarehouse(warehouse.id).then(
                 (activeStorageBins) => {
-                    console.log(warehouse.name, activeStorageBins);
                     addWarehouseToList(warehouse, activeStorageBins);
                 }
             );
@@ -73,6 +73,13 @@ function addWarehouseToList(newWarehouse, activeStorageBins) {
         .addEventListener("click", () => {
             window.location.hash = "#/warehouses/" + newWarehouse.id;
         });
+
+    listOfWarehouses.push(newWarehouse);
+
+    const option = document.createElement("option");
+    option.value = newWarehouse.id;
+    option.textContent = newWarehouse.name;
+    itemWarehouseSelect.appendChild(option);
 }
 
 //gets the list of item details, then finds the quantity in the network.
@@ -167,6 +174,7 @@ function addItemToList(storageBin, items) {
             itemListEl.appendChild(itemLi);
             itemListEl.classList.add("border");
         });
+        listOfItems.push(item);
     });
     binDiv.appendChild(itemListEl);
 
@@ -240,11 +248,78 @@ document
     .getElementById("warehouse-create-btn")
     .addEventListener("click", () => {
         document.getElementById("form-list").classList.remove("d-none");
+        document.getElementById("warehouse-form").classList.remove("d-none");
+        document.getElementById("item-form").classList.add("d-none");
+    });
+
+document.getElementById("item-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    const name = formData.get("item-name");
+    const sku = formData.get("item-sku");
+    const description = formData.get("item-description");
+    const shelfLife = formData.get("item-shelf-life") ?? "";
+    const warehouseSelected = formData.get("item-warehouse-select" ?? "");
+    const storageLocation = formData.get("item-storage-location" ?? "");
+    const quantity = formData.get("item-quantity" ?? "");
+});
+
+document.getElementById("item-create-btn").addEventListener("click", () => {
+    document.getElementById("form-list").classList.remove("d-none");
+    document.getElementById("warehouse-form").classList.add("d-none");
+    document.getElementById("item-form").classList.remove("d-none");
+});
+
+document.getElementById("item-addition").addEventListener("change", (event) => {
+    if (event.target.checked) {
+        document.getElementById("warehouse-select").classList.remove("d-none");
+        document.getElementById("storage-location").classList.remove("d-none");
+        document
+            .getElementById("item-date-manufactured")
+            .classList.remove("d-none");
+        document
+            .getElementById("quantity-of-addition")
+            .classList.remove("d-none");
+    } else {
+        document.getElementById("warehouse-select").classList.add("d-none");
+        document.getElementById("storage-location").classList.add("d-none");
+        document.getElementById("quantity-of-addition").classList.add("d-none");
+        document
+            .getElementById("item-date-manufactured")
+            .classList.add("d-none");
+    }
+});
+
+itemWarehouseSelect.addEventListener("change", (event) => {
+    listOfActiveBins = [];
+    const value = Number(event.target.value);
+    if (Number.isInteger(value)) {
+        getActiveStorageBinsInWarehouse(value).then((bin) => {
+            listOfActiveBins = bin;
+        });
+    }
+});
+
+document
+    .getElementById("item-storage-location")
+    .addEventListener("keyup", (event) => {
+        listOfActiveBins.map((bin) => {
+            if (event.target.value === bin.storageLocation) {
+                console.log("disabled");
+                itemSubmitButton.disabled = true;
+                itemSubmitButton.classList.add("disabled");
+            } else {
+                console.log("enabled");
+                itemSubmitButton.disabled = false;
+                itemSubmitButton.classList.remove("disabled");
+            }
+        });
     });
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-        document.getElementById("form-list").classList.add("d-none");
+        document.getElementById("warehouse-select").classList.add("d-none");
     }
 });
 
