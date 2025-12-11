@@ -145,6 +145,50 @@ function getItemDetailById(itemId) {
         });
 }
 
+function createLocation(country, stateOrRegion) {
+    const locationData = {
+        country: country,
+        stateOrRegion: stateOrRegion,
+    };
+    return fetch(`${URL}/locations`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(locationData),
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => console.error(err));
+}
+
+function createWarehouse(
+    warehouseName,
+    maxCapacity,
+    locationId,
+    address,
+    addressLineTwo
+) {
+    const warehouseData = {
+        name: warehouseName,
+        maximumCapacity: maxCapacity,
+        address: address,
+        addressLineTwo: addressLineTwo,
+    };
+    return fetch(`${URL}/warehouses?locationId=${locationId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(warehouseData),
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => console.error(err));
+}
+
 export {
     getAllWarehouses,
     getActiveStorageBinsInWarehouse,
@@ -154,4 +198,6 @@ export {
     getQuantityOfItemId,
     getItemsByItemName,
     getItemsByStorageId,
+    createLocation,
+    createWarehouse,
 };

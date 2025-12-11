@@ -7,6 +7,8 @@ import {
     getQuantityOfItemId,
     getItemsByItemName,
     getItemsByStorageId,
+    createLocation,
+    createWarehouse,
 } from "./api.js";
 
 let listOfItems = [];
@@ -198,6 +200,43 @@ document.getElementById("search-btn").addEventListener("click", () => {
 });
 
 document
+    .getElementById("warehouse-form")
+    .addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+
+        const name = formData.get("warehouse-name");
+        const maxCapacity = formData.get("warehouse-max-capacity");
+        const country = formData.get("warehouse-country");
+        const stateOrRegion = formData.get("warehouse-state");
+        const address = formData.get("warehouse-address");
+        const addressLineTwo = formData.get("warehouse-address-line-two");
+
+        createLocation(country, stateOrRegion)
+            .then((location) => {
+                createWarehouse(
+                    name,
+                    maxCapacity,
+                    location.id,
+                    address,
+                    addressLineTwo
+                ).then((warehouse) => {
+                    if (warehouse) {
+                        const container =
+                            document.getElementById("warehouse-list");
+                        container.innerHTML = "";
+                        getWarehouseDetails();
+                        document.getElementById("warehouse-form").reset();
+                        document
+                            .getElementById("form-list")
+                            .classList.add("d-none");
+                    }
+                });
+            })
+            .catch((err) => console.error(err));
+    });
+
+document
     .getElementById("warehouse-create-btn")
     .addEventListener("click", () => {
         document.getElementById("form-list").classList.remove("d-none");
@@ -207,4 +246,8 @@ document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
         document.getElementById("form-list").classList.add("d-none");
     }
+});
+
+document.getElementById("close-btn").addEventListener("click", () => {
+    document.getElementById("form-list").classList.add("d-none");
 });
