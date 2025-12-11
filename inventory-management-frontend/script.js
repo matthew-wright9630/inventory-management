@@ -5,6 +5,7 @@ import {
     getAllItemsByItemDetailId,
     getAllLotNumbersByItemId,
     getQuantityOfItemId,
+    getItemsByItemName,
 } from "./api.js";
 
 let listOfItems = [];
@@ -124,3 +125,35 @@ function addItemDetailsToList(itemDetail, itemQuantityObject) {
             window.location.hash = "#/items/" + itemDetail.id;
         });
 }
+
+function addActiveStorageBins(warehouseId) {
+    getActiveStorageBinsInWarehouse(warehouse.id).then((activeStorageBins) => {
+        addWarehouseToList(warehouse, activeStorageBins);
+    });
+}
+
+document.getElementById("search-btn").addEventListener("click", () => {
+    let text = document.getElementById("search-input").value;
+    getItemsByItemName(text).then((itemDetail) => {
+        if (itemDetail.length === 0) {
+            window.location.hash = "#/no-item";
+        } else {
+            let children = document.getElementById("item-list").children;
+
+            document.getElementById("item-list").classList.add("row");
+            document.getElementById("item-list").classList.remove("d-none");
+            document.getElementById("warehouse-list").classList.remove("row");
+            document.getElementById("warehouse-list").classList.add("d-none");
+
+            Array.from(children).forEach((child) => {
+                if (child.id === "item-" + itemDetail.id) {
+                    child.classList.remove("d-none");
+                    window.location.hash = "#/items/" + itemDetail.id;
+                } else {
+                    child.classList.add("d-none");
+                }
+            });
+        }
+    });
+    document.getElementById("search-input").value = "";
+});

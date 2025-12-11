@@ -14,10 +14,11 @@ function router() {
         document.getElementById("item-list").classList.add("d-none");
         document.getElementById("warehouse-list").classList.add("row");
         document.getElementById("warehouse-list").classList.remove("d-none");
+        document.getElementById("no-items").classList.add("d-none");
 
         Array.from(children).forEach((child) => {
             if (child.id === "warehouse-" + id) {
-                console.log("Found!");
+                child.classList.add("col-12");
                 child.classList.remove("d-none");
             } else {
                 child.classList.add("d-none");
@@ -30,10 +31,10 @@ function router() {
         document.getElementById("item-list").classList.remove("d-none");
         document.getElementById("warehouse-list").classList.remove("row");
         document.getElementById("warehouse-list").classList.add("d-none");
+        document.getElementById("no-items").classList.add("d-none");
 
         Array.from(children).forEach((child) => {
             if (child.id === "item-" + id) {
-                console.log("Found!");
                 child.classList.remove("d-none");
             } else {
                 child.classList.add("d-none");
@@ -46,21 +47,27 @@ function router() {
         document.getElementById("item-list").classList.remove("d-none");
         document.getElementById("warehouse-list").classList.remove("row");
         document.getElementById("warehouse-list").classList.add("d-none");
+        document.getElementById("no-items").classList.add("d-none");
 
         Array.from(children).forEach((child) => {
             child.classList.remove("d-none");
         });
-    } else {
+    } else if (page === "warehouses") {
         let children = document.getElementById("warehouse-list").children;
 
         document.getElementById("item-list").classList.remove("row");
         document.getElementById("item-list").classList.add("d-none");
         document.getElementById("warehouse-list").classList.add("row");
         document.getElementById("warehouse-list").classList.remove("d-none");
+        document.getElementById("no-items").classList.add("d-none");
 
         Array.from(children).forEach((child) => {
             child.classList.remove("d-none");
         });
+    } else {
+        document.getElementById("warehouse-list").classList.add("row");
+        document.getElementById("item-list").classList.add("d-none");
+        document.getElementById("no-items").classList.remove("d-none");
     }
 }
 

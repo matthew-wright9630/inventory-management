@@ -61,6 +61,23 @@ function getAllItemsByItemDetailId(itemDetailId) {
         });
 }
 
+function getItemsByItemName(itemName) {
+    return fetch(`${URL}/item-details/item/?itemName=${itemName}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((res) => res.text())
+        .then((text) => {
+            if (!text) return [];
+            return JSON.parse(text);
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+}
+
 function getAllLotNumbersByItemId(itemId) {
     return fetch(URL + "/lot-numbers/item/" + itemId, {
         method: "GET",
@@ -101,4 +118,5 @@ export {
     getAllItemsByItemDetailId,
     getAllLotNumbersByItemId,
     getQuantityOfItemId,
+    getItemsByItemName,
 };
