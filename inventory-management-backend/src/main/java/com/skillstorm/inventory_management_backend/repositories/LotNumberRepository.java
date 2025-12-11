@@ -15,7 +15,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface LotNumberRepository extends JpaRepository<LotNumber, Integer> {
 
-    public List<LotNumber> findAllByItemId(int itemId);
+    public LotNumber findByItemId(int itemId);
 
     @Query("update LotNumber lot set lot.isActive = :new_isActive where id = :lot_number_id")
     @Modifying

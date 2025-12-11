@@ -44,10 +44,6 @@ public class ItemService {
         return itemsRepository.findAllByStorageBin(storageBin);
     }
 
-    public ItemDetail findItemByName(String name) {
-        return itemDetailService.findItemDetailByName(name);
-    }
-
     public Item createItem(Item item, int storageBinId, int itemDetailId) {
         StorageBin storageBin = storageBinService.findStorageBinById(storageBinId);
         ItemDetail itemDetail = itemDetailService.findItemDetailById(itemDetailId);
