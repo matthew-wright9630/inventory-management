@@ -1,3 +1,7 @@
+.custom-nav {
+    margin: 20px;
+}
+
 .card {
     opacity: 1;
     transition: 0.3s linear;

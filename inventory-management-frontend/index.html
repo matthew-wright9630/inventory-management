@@ -20,28 +20,36 @@
         <script type="module" src="router.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     </head>
-    <body>
+    <body class="bg-dark-subtle">
         <header>
-            <h1>Inventory Management</h1>
-            <nav>
-                <button id="home-btn">Home</button>
-                <button id="item-btn">Items</button>
+            <h1 class="text-center">Inventory Management</h1>
+            <nav class="navbar bg-secondary-subtle custom-nav">
+                <a class="navbar-brand bg-primary-subtle" href="#/warehouses"
+                    >Warehouses</a
+                >
+                <a class="navbar-brand bg-primary-subtle" href="#/items"
+                    >Items</a
+                >
+                <form class="d-flex" role="search">
+                    <input
+                        class="form-control me-2"
+                        type="search"
+                        placeholder="Search for items"
+                        aria-label="Search"
+                    />
+                    <button
+                        id="search-btn"
+                        class="btn btn-outline-success"
+                        type="button"
+                    >
+                        Search
+                    </button>
+                </form>
             </nav>
-            <!-- <div> -->
-            <!-- <a href="#/">Home</a> -->
-            <!-- <a href="#/items">Items</a> -->
-            <!-- <a href="#/warehouses">Warehouses</a> -->
-            <!-- </div> -->
         </header>
         <section>
             <div class="container text-center">
-                <div id="warehouse-list" class="d-none">
-                    <!--
-                        name of warehouse
-                        address, addressLineTwo, stateOrRegion, Country
-                        currentCapacity / maxCapacity -> graphic representation
-                        -->
-                </div>
+                <div id="warehouse-list" class="d-none"></div>
                 <div id="item-list" class="d-none"></div>
             </div>
         </section>

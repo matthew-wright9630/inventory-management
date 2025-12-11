@@ -67,7 +67,7 @@ function addWarehouseToList(newWarehouse, activeStorageBins) {
     document
         .getElementById(`warehouse-${newWarehouse.id}`)
         .addEventListener("click", () => {
-            console.log(newWarehouse);
+            window.location.hash = "#/warehouses/" + newWarehouse.id;
         });
 }
 
@@ -121,6 +121,6 @@ function addItemDetailsToList(itemDetail, itemQuantityObject) {
     document
         .getElementById(`item-${itemDetail.id}`)
         .addEventListener("click", () => {
-            console.log(itemDetail);
+            window.location.hash = "#/items/" + itemDetail.id;
         });
 }

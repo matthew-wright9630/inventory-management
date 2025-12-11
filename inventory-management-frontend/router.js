@@ -8,27 +8,69 @@ function router() {
     let id = hashParts[2];
 
     if (page === "warehouses" && id) {
-    } else if (page === "items" && id) {
-    } else if (page === "items") {
-        document.getElementById("item-list").classList.add("row");
-        document.getElementById("item-list").classList.remove("d-none");
-        document.getElementById("warehouse-list").classList.remove("row");
-        document.getElementById("warehouse-list").classList.add("d-none");
-    } else {
+        let children = document.getElementById("warehouse-list").children;
+
         document.getElementById("item-list").classList.remove("row");
         document.getElementById("item-list").classList.add("d-none");
         document.getElementById("warehouse-list").classList.add("row");
         document.getElementById("warehouse-list").classList.remove("d-none");
+
+        Array.from(children).forEach((child) => {
+            if (child.id === "warehouse-" + id) {
+                console.log("Found!");
+                child.classList.remove("d-none");
+            } else {
+                child.classList.add("d-none");
+            }
+        });
+    } else if (page === "items" && id) {
+        let children = document.getElementById("item-list").children;
+
+        document.getElementById("item-list").classList.add("row");
+        document.getElementById("item-list").classList.remove("d-none");
+        document.getElementById("warehouse-list").classList.remove("row");
+        document.getElementById("warehouse-list").classList.add("d-none");
+
+        Array.from(children).forEach((child) => {
+            if (child.id === "item-" + id) {
+                console.log("Found!");
+                child.classList.remove("d-none");
+            } else {
+                child.classList.add("d-none");
+            }
+        });
+    } else if (page === "items") {
+        let children = document.getElementById("item-list").children;
+
+        document.getElementById("item-list").classList.add("row");
+        document.getElementById("item-list").classList.remove("d-none");
+        document.getElementById("warehouse-list").classList.remove("row");
+        document.getElementById("warehouse-list").classList.add("d-none");
+
+        Array.from(children).forEach((child) => {
+            child.classList.remove("d-none");
+        });
+    } else {
+        let children = document.getElementById("warehouse-list").children;
+
+        document.getElementById("item-list").classList.remove("row");
+        document.getElementById("item-list").classList.add("d-none");
+        document.getElementById("warehouse-list").classList.add("row");
+        document.getElementById("warehouse-list").classList.remove("d-none");
+
+        Array.from(children).forEach((child) => {
+            child.classList.remove("d-none");
+        });
     }
 }
 
-document.getElementById("home-btn").addEventListener("click", () => {
-    window.location.hash = "#/";
-});
+// document.getElementById("warehouse-btn").addEventListener("click", () => {
+//     window.location.hash = "#/warehouses";
+// });
 
-document.getElementById("item-btn").addEventListener("click", () => {
-    window.location.hash = "#/items";
-});
+// document.getElementById("item-btn").addEventListener("click", () => {
+//     window.location.hash = "#/items";
+// });
 
 window.addEventListener("hashchange", router);
 window.addEventListener("load", () => {
