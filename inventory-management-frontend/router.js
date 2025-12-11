@@ -19,6 +19,7 @@ function router() {
         document
             .getElementById("storage-location-list")
             .classList.remove("d-none");
+        document.getElementById("storage-location-list").classList.add("row");
 
         Array.from(children).forEach((child) => {
             if (child.id === "warehouse-" + id) {
@@ -67,7 +68,6 @@ function router() {
 function showHideElements(id) {
     let children = document.getElementById("section-container").children;
     Array.from(children).forEach((child) => {
-        console.log(child);
         if (child.id === id) {
             document.getElementById(child.id).classList.add("row");
             document.getElementById(child.id).classList.remove("d-none");

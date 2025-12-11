@@ -95,7 +95,7 @@ function getItemsByStorageId(storageId) {
         });
 }
 
-function getAllLotNumbersByItemId(itemId) {
+function getLotNumbersByItemId(itemId) {
     return fetch(URL + "/lot-numbers/item/" + itemId, {
         method: "GET",
         headers: {
@@ -119,9 +119,10 @@ function getQuantityOfItemId(itemId) {
             "Content-Type": "application/json",
         },
     })
-        .then((res) => {
-            if (res.status === 204) return [];
-            return res.json();
+        .then((res) => res.text())
+        .then((text) => {
+            if (!text) return [];
+            return JSON.parse(text);
         })
         .catch((err) => {
             console.error(err);
@@ -149,7 +150,7 @@ export {
     getActiveStorageBinsInWarehouse,
     getAllItems,
     getAllItemsByItemDetailId,
-    getAllLotNumbersByItemId,
+    getLotNumbersByItemId,
     getQuantityOfItemId,
     getItemsByItemName,
     getItemsByStorageId,

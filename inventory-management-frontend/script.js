@@ -3,7 +3,7 @@ import {
     getActiveStorageBinsInWarehouse,
     getAllItems,
     getAllItemsByItemDetailId,
-    getAllLotNumbersByItemId,
+    getLotNumbersByItemId,
     getQuantityOfItemId,
     getItemsByItemName,
     getItemsByStorageId,
@@ -20,6 +20,7 @@ export function getWarehouseDetails() {
         warehouseList.map((warehouse) => {
             getActiveStorageBinsInWarehouse(warehouse.id).then(
                 (activeStorageBins) => {
+                    console.log(warehouse.name, activeStorageBins);
                     addWarehouseToList(warehouse, activeStorageBins);
                 }
             );
@@ -128,53 +129,46 @@ function addItemDetailsToList(itemDetail, itemQuantityObject) {
 export function addActiveStorageBins(warehouseId) {
     getActiveStorageBinsInWarehouse(warehouseId).then((activeStorageBins) => {
         activeStorageBins.map((storageBin) => {
-            getItemsByStorageId(storageBin.id).then((item) => {
-                if (item.length > 0) {
-                    getAllLotNumbersByItemId(item[0].id).then((lotNumber) => {
-                        addItemToList(storageBin, item[0], lotNumber);
-                    });
-                }
+            getItemsByStorageId(storageBin.id).then((itemList) => {
+                addItemToList(storageBin, itemList);
             });
         });
     });
 }
 
-function addItemToList(storageBin, item, lotNumber) {
-    let itemDiv = document.createElement("div");
-    let titleEl = document.createElement("h2");
-    let skuEl = document.createElement("p");
-    let descriptionEl = document.createElement("p");
-    let shelfLifeEl = document.createElement("p");
-    let quantityEl = document.createElement("p");
-    let storageLocationEl = document.createElement("p");
-
-    itemDiv.id = `storage-location-${item.id}`;
-    titleEl.innerText = item.itemDetail.name;
-    skuEl.innerText = "SKU #: " + item.itemDetail.sku;
-    descriptionEl.innerText = "Description: " + item.itemDetail.description;
-    shelfLifeEl.innerText = "Shelf Life: " + item.itemDetail.shelfLife;
-    quantityEl.innerText = "Quantity of item in network: " + lotNumber.quantity;
-    storageLocationEl.innerText = storageBin.storageLocation;
-
-    itemDiv.appendChild(titleEl);
-    itemDiv.appendChild(skuEl);
-    itemDiv.appendChild(descriptionEl);
-    itemDiv.appendChild(shelfLifeEl);
-    itemDiv.appendChild(quantityEl);
-    itemDiv.appendChild(storageLocationEl);
-
-    console.log(itemDiv);
-
-    itemDiv.classList.add(
+function addItemToList(storageBin, items) {
+    let binDiv = document.createElement("div");
+    binDiv.id = `storage-bin-${storageBin.id}`;
+    binDiv.classList.add(
         "container-fluid",
-        "col-4",
+        "col-6",
         "border",
         "rounded",
         "card",
-        "bg-primary"
+        "bg-primary",
+        "mb-3"
     );
 
-    document.getElementById("storage-location-list").appendChild(itemDiv);
+    let binTitleEl = document.createElement("h2");
+    binTitleEl.innerText = `Storage Bin: ${storageBin.storageLocation}`;
+    binDiv.appendChild(binTitleEl);
+
+    let itemListEl = document.createElement("ul");
+    items.forEach((item) => {
+        getLotNumbersByItemId(item.id).then((lot) => {
+            console.log(item.id, lot.quantity);
+            let itemLi = document.createElement("li");
+            itemLi.innerHTML = `
+            <strong>${item.itemDetail.name}</strong> (SKU: ${item.itemDetail.sku})<br>
+            Quantity in Storage Bin: ${lot.quantity}
+            `;
+            itemListEl.appendChild(itemLi);
+            itemListEl.classList.add("border");
+        });
+    });
+    binDiv.appendChild(itemListEl);
+
+    document.getElementById("storage-location-list").appendChild(binDiv);
 }
 
 document.getElementById("search-btn").addEventListener("click", () => {

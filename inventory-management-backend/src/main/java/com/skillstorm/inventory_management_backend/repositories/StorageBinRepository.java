@@ -15,7 +15,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface StorageBinRepository extends JpaRepository<StorageBin, Integer> {
 
-    List<StorageBin> findByWarehouseIdAndIsActive(int warehouseId, Boolean isActive);
+    List<StorageBin> findAllByWarehouseIdAndIsActive(int warehouseId, Boolean isActive);
 
     @Query("update StorageBin bin set bin.isActive = :new_isActive where id = :storage_bin_id")
     @Modifying

@@ -40,7 +40,7 @@ public class StorageBinService {
             throw new IllegalArgumentException(
                     "Warehouse does not exist. Please try again with another warehouse");
         }
-        List<StorageBin> activeStorageBins = storageBinRepository.findByWarehouseIdAndIsActive(warehouseId, true);
+        List<StorageBin> activeStorageBins = storageBinRepository.findAllByWarehouseIdAndIsActive(warehouseId, true);
         List<StorageBin> listOfActiveStorageBins = new ArrayList<>();
         for (StorageBin bin : activeStorageBins) {
             listOfActiveStorageBins.add(bin);
