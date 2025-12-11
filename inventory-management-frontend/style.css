@@ -1,9 +1,9 @@
-.warehouse-card {
+.card {
     opacity: 1;
     transition: 0.3s linear;
 }
 
-.warehouse-card:hover {
+.card:hover {
     opacity: 0.5;
     cursor: pointer;
 }

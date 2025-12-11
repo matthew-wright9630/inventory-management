@@ -18,6 +18,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
     List<Item> findAllByStorageBin(StorageBin storageBin);
 
+    public List<Item> findAllByItemDetailId(int id);
+
     @Query("update Item i set i.isActive = :new_isActive where id = :item_id")
     @Modifying
     @Transactional

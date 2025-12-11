@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.skillstorm.inventory_management_backend.services.ItemService;
 
 @RestController
 @RequestMapping("/items")
+@CrossOrigin({ "http://127.0.0.1:5500" })
 public class ItemController {
 
     private final ItemService itemService;
@@ -31,6 +33,18 @@ public class ItemController {
     public ResponseEntity<List<Item>> findAllItems() {
         try {
             List<Item> items = itemService.findAllItems();
+            return new ResponseEntity<>(items, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
+    }
+
+    @GetMapping("/item-details/{itemDetailId}")
+    public ResponseEntity<List<Item>> findAllItemsByItemDetailId(@PathVariable int itemDetailId) {
+        try {
+            List<Item> items = itemService.findItemsByItemDetailId(itemDetailId);
             return new ResponseEntity<>(items, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();

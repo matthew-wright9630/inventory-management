@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,8 @@ import com.skillstorm.inventory_management_backend.models.LotNumber;
 import com.skillstorm.inventory_management_backend.services.LotNumberService;
 
 @RestController
-@RequestMapping("/lot-number")
+@RequestMapping("/lot-numbers")
+@CrossOrigin({ "http://127.0.0.1:5500/" })
 public class LotNumberController {
 
     private final LotNumberService lotNumberService;

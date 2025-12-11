@@ -17,22 +17,32 @@
         />
 
         <script type="module" src="script.js" defer></script>
+        <script type="module" src="router.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     </head>
     <body>
         <header>
             <h1>Inventory Management</h1>
+            <nav>
+                <button id="home-btn">Home</button>
+                <button id="item-btn">Items</button>
+            </nav>
+            <!-- <div> -->
+            <!-- <a href="#/">Home</a> -->
+            <!-- <a href="#/items">Items</a> -->
+            <!-- <a href="#/warehouses">Warehouses</a> -->
+            <!-- </div> -->
         </header>
         <section>
-            <button id="warehouse-test">Test</button>
             <div class="container text-center">
-                <div id="warehouse-list" class="row">
+                <div id="warehouse-list" class="d-none">
                     <!--
                         name of warehouse
                         address, addressLineTwo, stateOrRegion, Country
                         currentCapacity / maxCapacity -> graphic representation
                         -->
                 </div>
+                <div id="item-list" class="d-none"></div>
             </div>
         </section>
         <div></div>
