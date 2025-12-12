@@ -323,7 +323,6 @@ document.getElementById("item-form").addEventListener("submit", (event) => {
 
     createItemDetails(name, sku, description, shelfLife)
         .then((itemDetail) => {
-            console.log(itemDetail);
             if (storageLocation) {
                 createStorageBin(warehouseSelected, storageLocation).then(
                     (bin) => {
@@ -371,19 +370,15 @@ document
 
         getItemsByItemName(itemName)
             .then((itemDetail) => {
-                console.log(itemDetail);
                 if (storageLocation) {
                     createStorageBin(warehouseSelected, storageLocation).then(
                         (bin) => {
-                            console.log(bin, "BIN");
                             createItem(bin.id, itemDetail.id).then((item) => {
                                 createLotNumber(
                                     quantity,
                                     item.id,
                                     manufacturedDate
-                                ).then((lot) => {
-                                    console.log(lot);
-                                });
+                                ).then((lot) => {});
                             });
                         }
                     );
@@ -595,7 +590,6 @@ function getEditInventoryOptions() {
     const warehouseId = Number(parts[2]);
 
     getActiveStorageBinsInWarehouse(warehouseId).then((bins) => {
-        console.log(bins);
         if (bins.length > 0) {
             bins.map((bin) => {
                 getItemsByStorageId(bin.id).then((itemList) => {
@@ -604,7 +598,6 @@ function getEditInventoryOptions() {
                             const option = document.createElement("option");
                             option.value = item.id;
                             option.textContent = item.itemDetail.name;
-                            console.log(option);
                             inventoryRemoveOptions.appendChild(option);
                         });
                     }
@@ -630,7 +623,6 @@ inventoryRemoveOptions.addEventListener("change", (event) => {
                                 const option = document.createElement("option");
                                 option.value = bin.id;
                                 option.textContent = bin.storageLocation;
-                                console.log(option);
                                 storageBinUpdateOptions.appendChild(option);
                             }
                         });
@@ -669,11 +661,8 @@ document
         const quantity = formData.get("edit-inventory-quantity");
         const manufacturedDate = new Date().toISOString().slice(0, 10);
 
-        console.log(item);
-
         const itemDiv = document.getElementById(`item-${item}`);
         if (!itemDiv) {
-            console.log(itemDiv);
             return;
         }
 
@@ -782,9 +771,7 @@ document
 
         const hash = window.location.hash;
         const parts = hash.split("/");
-        console.log(parts);
         const itemDetailsId = Number(parts[2]);
-        console.log(itemDetailsId);
 
         updateItemDetail(itemDetailsId, name, sku, description, shelfLife)
             .then((item) => {

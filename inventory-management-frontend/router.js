@@ -146,7 +146,6 @@ function populateEditItemForm(element) {
         .replace("Shelf Life:", "")
         .replace("days", "")
         .trim();
-    console.log(shelfLife);
 
     let cleanedSku = sku.replace("SKU #:", "").trim();
     let cleanedDescription = description.replace("Description:", "").trim();
