@@ -312,6 +312,24 @@ function updateWarehouse(
         .catch((err) => console.error(err));
 }
 
+function updateLotNumber(quantity, lotId, manufacturedDate) {
+    const lotNumberData = {
+        quantity: quantity,
+        manufactureDate: manufacturedDate,
+    };
+    return fetch(`${URL}/lot-numbers/${lotId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(lotNumberData),
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => console.error(err));
+}
+
 export {
     getAllWarehouses,
     getActiveStorageBinsInWarehouse,
@@ -329,4 +347,5 @@ export {
     createLotNumber,
     updateLocation,
     updateWarehouse,
+    updateLotNumber,
 };

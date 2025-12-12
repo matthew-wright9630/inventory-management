@@ -2,6 +2,7 @@ import {
     getWarehouseDetails,
     getItemInformation,
     addActiveStorageBins,
+    resetOptions,
 } from "./script.js";
 
 const parent = document.getElementById("storage-location-list");
@@ -37,6 +38,9 @@ function router() {
         });
     } else if (page === "warehouses" && !id) {
         showHideElements("warehouse-list");
+
+        resetOptions();
+
         let children = document.getElementById("warehouse-list").children;
 
         parent.innerHTML = "";

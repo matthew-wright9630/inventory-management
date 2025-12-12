@@ -15,16 +15,21 @@ import {
     createLotNumber,
     updateLocation,
     updateWarehouse,
+    updateLotNumber,
 } from "./api.js";
 
-const listOfWarehouses = [];
-const listOfItems = [];
-const listOfActiveBins = [];
+let listOfWarehouses = [];
+let listOfItems = [];
+let listOfActiveBins = [];
 
 const itemWarehouseSelect = document.getElementById("item-warehouse-select");
 const itemSubmitButton = document.getElementById("create-item-submit");
 const inventoryOptions = document.getElementById("add-inventory-select");
 const itemUpdateOptions = document.getElementById("inventory-select");
+const inventoryRemoveOptions = document.getElementById("edit-inventory-select");
+const storageBinUpdateOptions = document.getElementById(
+    "edit-storage-bin-select"
+);
 
 export function getWarehouseDetails() {
     getAllWarehouses().then((warehouseList) => {
@@ -99,23 +104,35 @@ function addWarehouseToList(newWarehouse, activeStorageBins) {
 export function getItemInformation() {
     getAllItems()
         .then((itemDetailList) => {
-            itemDetailList.map((itemDetail) => {
+            itemDetailList.forEach((itemDetail) => {
                 listOfItems.push(itemDetail);
-                getQuantityOfItemId(itemDetail.id).then((quantity) => {
-                    addItemDetailsToList(itemDetail, quantity);
+
+                getLotNumbersByItemId(itemDetail.id).then((lots) => {
+                    let totalQuantity = 0;
+
+                    if (Array.isArray(lots)) {
+                        totalQuantity = lots.reduce(
+                            (sum, lot) => sum + (lot.quantity || 0),
+                            0
+                        );
+                    }
+
+                    addItemDetailsToList(itemDetail, totalQuantity, lots);
                 });
             });
         })
         .catch((err) => console.error(err));
 }
 
-function addItemDetailsToList(itemDetail, itemQuantityObject) {
+function addItemDetailsToList(itemDetail, itemQuantityObject, lots = []) {
     let itemDiv = document.createElement("div");
     let titleEl = document.createElement("h2");
     let skuEl = document.createElement("p");
     let descriptionEl = document.createElement("p");
     let shelfLifeEl = document.createElement("p");
     let quantityEl = document.createElement("p");
+
+    itemDiv.dataset.lots = JSON.stringify(lots);
 
     itemDiv.id = `item-${itemDetail.id}`;
     titleEl.innerText = itemDetail.name;
@@ -176,20 +193,26 @@ function addItemToList(storageBin, items) {
     binDiv.appendChild(binTitleEl);
 
     let itemListEl = document.createElement("ul");
+
     items.forEach((item) => {
-        getLotNumbersByItemId(item.id).then((lot) => {
-            if (lot.quantity === undefined) {
-                lot.quantity = 0;
-            }
+        getLotNumbersByItemId(item.id).then((lots) => {
+            if (!Array.isArray(lots)) lots = [];
+
+            const totalQuantity = lots.reduce(
+                (sum, lot) => sum + (lot.quantity || 0),
+                0
+            );
+
             let itemLi = document.createElement("li");
             itemLi.innerHTML = `
             <strong>${item.itemDetail.name}</strong> (SKU: ${item.itemDetail.sku})<br>
-            Quantity in Storage Bin: ${lot.quantity}
-            `;
+            Quantity in Storage Bin: ${totalQuantity}
+        `;
             itemListEl.appendChild(itemLi);
             itemListEl.classList.add("border");
         });
     });
+
     binDiv.appendChild(itemListEl);
 
     document.getElementById("storage-location-list").appendChild(binDiv);
@@ -263,6 +286,7 @@ document
     .addEventListener("click", () => {
         document.getElementById("form-list").classList.remove("d-none");
         document.getElementById("warehouse-form").classList.remove("d-none");
+        document.getElementById("edit-warehouse-form").classList.add("d-none");
         document.getElementById("item-form").classList.add("d-none");
         document.getElementById("inventory-form").classList.add("d-none");
     });
@@ -288,6 +312,7 @@ document.getElementById("item-form").addEventListener("submit", (event) => {
 
     createItemDetails(name, sku, description, shelfLife)
         .then((itemDetail) => {
+            console.log(itemDetail);
             if (storageLocation) {
                 createStorageBin(warehouseSelected, storageLocation).then(
                     (bin) => {
@@ -322,7 +347,6 @@ document
 
         const itemName = select.options[select.selectedIndex].text;
 
-        // const name = formData.get("inventory-select");
         const warehouseSelected = formData.get("add-inventory-select" ?? "");
         const storageLocation =
             formData.get("inventory-storage-location") === ""
@@ -346,7 +370,9 @@ document
                                     quantity,
                                     item.id,
                                     manufacturedDate
-                                ).then((lot) => {});
+                                ).then((lot) => {
+                                    console.log(lot);
+                                });
                             });
                         }
                     );
@@ -392,7 +418,6 @@ document
                     addressLineTwo
                 ).then((warehouse) => {
                     if (warehouse) {
-                        console.log("Success?");
                         const container =
                             document.getElementById("warehouse-list");
                         container.innerHTML = "";
@@ -413,6 +438,8 @@ document.getElementById("item-create-btn").addEventListener("click", () => {
     document.getElementById("warehouse-form").classList.add("d-none");
     document.getElementById("item-form").classList.remove("d-none");
     document.getElementById("inventory-form").classList.add("d-none");
+    document.getElementById("edit-warehouse-form").classList.add("d-none");
+    document.getElementById("edit-inventory-form").classList.add("d-none");
 });
 
 document
@@ -423,15 +450,27 @@ document
         document.getElementById("warehouse-form").classList.add("d-none");
         document.getElementById("item-form").classList.add("d-none");
         document.getElementById("inventory-form").classList.remove("d-none");
+        document.getElementById("edit-warehouse-form").classList.add("d-none");
+        document.getElementById("edit-inventory-form").classList.add("d-none");
     });
 
 document.getElementById("edit-warehouse-btn").addEventListener("click", () => {
-    getItemOptions();
     document.getElementById("form-list").classList.remove("d-none");
     document.getElementById("warehouse-form").classList.add("d-none");
     document.getElementById("item-form").classList.add("d-none");
     document.getElementById("inventory-form").classList.add("d-none");
     document.getElementById("edit-warehouse-form").classList.remove("d-none");
+    document.getElementById("edit-inventory-form").classList.add("d-none");
+});
+
+document.getElementById("edit-inventory-btn").addEventListener("click", () => {
+    getEditInventoryOptions();
+    document.getElementById("form-list").classList.remove("d-none");
+    document.getElementById("warehouse-form").classList.add("d-none");
+    document.getElementById("item-form").classList.add("d-none");
+    document.getElementById("inventory-form").classList.add("d-none");
+    document.getElementById("edit-warehouse-form").classList.add("d-none");
+    document.getElementById("edit-inventory-form").classList.remove("d-none");
 });
 
 document.getElementById("item-addition").addEventListener("change", (event) => {
@@ -485,9 +524,175 @@ function getItemOptions() {
     });
 }
 
+function getEditInventoryOptions() {
+    const hash = window.location.hash;
+    const parts = hash.split("/");
+    const warehouseId = Number(parts[2]);
+
+    getActiveStorageBinsInWarehouse(warehouseId).then((bins) => {
+        console.log(bins);
+        if (bins.length > 0) {
+            bins.map((bin) => {
+                getItemsByStorageId(bin.id).then((itemList) => {
+                    if (itemList.length > 0) {
+                        itemList.map((item) => {
+                            const option = document.createElement("option");
+                            option.value = item.id;
+                            option.textContent = item.itemDetail.name;
+                            console.log(option);
+                            inventoryRemoveOptions.appendChild(option);
+                        });
+                    }
+                });
+            });
+        }
+    });
+}
+
+inventoryRemoveOptions.addEventListener("change", (event) => {
+    listOfActiveBins = [];
+    const hash = window.location.hash;
+    const parts = hash.split("/");
+    const warehouseId = Number(parts[2]);
+    const value = Number(event.target.value);
+    getActiveStorageBinsInWarehouse(warehouseId).then((bins) => {
+        if (bins.length > 0) {
+            bins.map((bin) => {
+                getItemsByStorageId(bin.id).then((itemList) => {
+                    if (itemList.length > 0) {
+                        itemList.map((item) => {
+                            if (item.id === value) {
+                                const option = document.createElement("option");
+                                option.value = bin.id;
+                                option.textContent = bin.storageLocation;
+                                console.log(option);
+                                storageBinUpdateOptions.appendChild(option);
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    });
+});
+
+storageBinUpdateOptions.addEventListener("change", (event) => {
+    getItemsByStorageId(event.target.value).then((itemList) => {
+        if (itemList.length > 0) {
+            itemList.forEach((item) => {
+                getLotNumbersByItemId(item.id).then((lot) => {
+                    if (lot.quantity === undefined) {
+                        lot.quantity = 0;
+                    }
+                    const quantity = document.getElementById(
+                        "edit-inventory-quantity"
+                    );
+                    quantity.max = lot.quantity;
+                });
+            });
+        }
+    });
+});
+
+document
+    .getElementById("edit-inventory-form")
+    .addEventListener("submit", (event) => {
+        event.preventDefault();
+        console.log("test");
+        const formData = new FormData(event.target);
+
+        const item = formData.get("edit-inventory-select");
+        const quantity = formData.get("edit-inventory-quantity");
+        const manufacturedDate = new Date().toISOString().slice(0, 10);
+
+        console.log(item);
+
+        const itemDiv = document.getElementById(`item-${item}`);
+        if (!itemDiv) {
+            console.log(itemDiv);
+            return;
+        }
+
+        const lots = JSON.parse(itemDiv.dataset.lots);
+        let remainingQuantity = quantity;
+
+        lots.sort(
+            (a, b) => new Date(a.manufactureDate) - new Date(b.manufactureDate)
+        );
+
+        for (let lot of lots) {
+            if (remainingQuantity <= 0) break;
+
+            if (lot.quantity >= remainingQuantity) {
+                lot.quantity -= remainingQuantity;
+                updateLotNumber(lot.quantity, lot.id, manufacturedDate)
+                    .then((lot) => {
+                        const container =
+                            document.getElementById("warehouse-list");
+                        container.innerHTML = "";
+                        getWarehouseDetails();
+                        document.getElementById("warehouse-form").reset();
+                        document
+                            .getElementById("form-list")
+                            .classList.add("d-none");
+                        window.location.hash = "#/warehouses/";
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                remainingQuantity = 0;
+            } else {
+                remainingQuantity -= lot.quantity;
+                lot.quantity = 0;
+                updateLotNumber(0, lot.id, manufacturedDate)
+                    .then((lot) => {
+                        const container =
+                            document.getElementById("warehouse-list");
+                        container.innerHTML = "";
+                        getWarehouseDetails();
+                        document.getElementById("warehouse-form").reset();
+                        document
+                            .getElementById("form-list")
+                            .classList.add("d-none");
+                        window.location.hash = "#/warehouses/";
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+            }
+        }
+
+        if (remainingQuantity > 0) {
+            console.error("Quantity is too large!");
+        }
+
+        // updateLotNumber(quantity, item, manufacturedDate)
+        // .then((lot) => {
+        //     const container = document.getElementById("warehouse-list");
+        //     container.innerHTML = "";
+        //     getWarehouseDetails();
+        //     document.getElementById("warehouse-form").reset();
+        //     document.getElementById("form-list").classList.add("d-none");
+        //     window.location.hash = "#/warehouses/";
+        // })
+        // .catch((err) => {
+        //     console.error(err);
+        // });
+    });
+
+export function resetOptions() {
+    storageBinUpdateOptions.innerHTML = "";
+    inventoryRemoveOptions.innerHTML = "";
+}
+
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-        document.getElementById("warehouse-select").classList.add("d-none");
+        document.getElementById("form-list").classList.add("d-none");
+        document.getElementById("edit-inventory-form").classList.add("d-none");
+        document.getElementById("inventory-form").classList.add("d-none");
+        document.getElementById("warehouse-form").classList.add("d-none");
+        document.getElementById("edit-warehouse-form").classList.add("d-none");
+        document.getElementById("item-form").classList.add("d-none");
     }
 });
 
