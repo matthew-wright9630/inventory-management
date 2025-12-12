@@ -55,6 +55,9 @@ function router() {
         showHideElements("item-list");
         let children = document.getElementById("item-list").children;
 
+        document.getElementById("item-buttons").classList.remove("d-none");
+        document.getElementById("item-buttons").classList.add("d-flex");
+
         Array.from(children).forEach((child) => {
             if (child.id === "item-" + id) {
                 child.classList.remove("d-none");

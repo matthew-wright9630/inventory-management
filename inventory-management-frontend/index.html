@@ -65,8 +65,15 @@
                 >
                     <button id="edit-warehouse-btn">Edit Warehouse</button>
                     <button id="edit-inventory-btn">Update Inventory</button>
+                    <button id="delete-warehouse-btn">Delete Warehouse</button>
                 </div>
                 <div id="item-list" class="d-none"></div>
+                <div
+                    id="item-buttons"
+                    class="col-12 d-none align-items-center pb-3 justify-content-around h-50 mt-5"
+                >
+                    <button id="delete-item-btn">Delete Product</button>
+                </div>
                 <div id="storage-location-list" class="d-none"></div>
                 <div
                     id="no-items"
@@ -543,6 +550,56 @@
                                 class="btn btn-primary mb-5 mt-3"
                             >
                                 Update Inventory
+                            </button>
+                        </div>
+                    </form>
+                    <form
+                        action="#"
+                        id="delete-warehouse-form"
+                        class="form bg-secondary col-12 mx-3"
+                    >
+                        <h3 class="text-center mt-5">Delete Warehouse?</h3>
+                        <div
+                            class="mb-3 mx-3 d-flex align-items-center justify-content-center"
+                            style="height: 75vh"
+                        >
+                            <p class="align-center text-center fs-3">
+                                Are you sure you want to delete this warehouse?
+                                This may not be able to be reverted.
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <button
+                                id="delete-warehouse-submit"
+                                type="submit"
+                                class="btn btn-primary mb-5 mt-3"
+                            >
+                                Delete Warehouse
+                            </button>
+                        </div>
+                    </form>
+                    <form
+                        action="#"
+                        id="delete-item-form"
+                        class="form bg-secondary col-12 mx-3"
+                    >
+                        <h3 class="text-center mt-5">Delete Product?</h3>
+                        <div
+                            class="mb-3 mx-3 d-flex align-items-center justify-content-center"
+                            style="height: 75vh"
+                        >
+                            <p class="align-center text-center fs-3">
+                                Are you sure you want to delete this product?
+                                This may not be able to be reverted.
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <button
+                                id="delete-item-submit"
+                                type="submit"
+                                class="btn btn-primary mb-5 mt-3"
+                            >
+                                Delete Product
                             </button>
                         </div>
                     </form>

@@ -330,6 +330,24 @@ function updateLotNumber(quantity, lotId, manufacturedDate) {
         .catch((err) => console.error(err));
 }
 
+function deleteWarehouse(warehouseId) {
+    return fetch(`${URL}/warehouses/${warehouseId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).catch((err) => console.error(err));
+}
+
+function deleteItemDetails(itemDetailId) {
+    return fetch(`${URL}/item-details/${itemDetailId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).catch((err) => console.error(err));
+}
+
 export {
     getAllWarehouses,
     getActiveStorageBinsInWarehouse,
@@ -348,4 +366,6 @@ export {
     updateLocation,
     updateWarehouse,
     updateLotNumber,
+    deleteWarehouse,
+    deleteItemDetails,
 };
