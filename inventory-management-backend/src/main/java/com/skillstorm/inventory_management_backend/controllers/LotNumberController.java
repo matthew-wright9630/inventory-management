@@ -40,9 +40,9 @@ public class LotNumberController {
     }
 
     @GetMapping("/item/{itemId}")
-    public ResponseEntity<LotNumber> getQuantityOfItem(@PathVariable int itemId) {
+    public ResponseEntity<List<LotNumber>> getQuantityOfItem(@PathVariable int itemId) {
         try {
-            LotNumber lotNumber = lotNumberService.findLotByItemId(itemId);
+            List<LotNumber> lotNumber = lotNumberService.findLotByItemId(itemId);
             return new ResponseEntity<>(lotNumber, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
@@ -58,15 +58,15 @@ public class LotNumberController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<LotNumber> updateLotNumber(@RequestBody LotNumber lotNumber,
-            @RequestParam(defaultValue = "0") int itemId) {
+    @PutMapping("/{lotId}")
+    public ResponseEntity<LotNumber> updateLotNumber(
+            @PathVariable int lotId,
+            @RequestBody LotNumber lotNumberUpdate) {
         try {
-            LotNumber newLotNumber = lotNumberService.saveLotNumber(lotNumber, itemId);
-            return new ResponseEntity<LotNumber>(newLotNumber, HttpStatus.OK);
+            LotNumber updated = lotNumberService.updateLot(lotId, lotNumberUpdate);
+            return ResponseEntity.ok(updated);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().header("message",
-                    e.getMessage()).build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 

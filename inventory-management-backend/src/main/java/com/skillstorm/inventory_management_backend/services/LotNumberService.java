@@ -33,9 +33,9 @@ public class LotNumberService {
         throw new IllegalArgumentException("Lot number does not exist. Please try with another lot number.");
     }
 
-    public LotNumber findLotByItemId(int itemId) {
-        LotNumber lotNumber = lotNumbersRepository.findByItemId(itemId);
-        return lotNumber;
+    public List<LotNumber> findLotByItemId(int itemId) {
+        List<LotNumber> lotNumbers = lotNumbersRepository.findAllByItemId(itemId);
+        return lotNumbers;
     }
 
     public LotNumber createLotNumber(LotNumber lotNumber, int itemId) {
@@ -47,14 +47,14 @@ public class LotNumberService {
         throw new IllegalArgumentException("Lot Number not able to be created");
     }
 
-    public LotNumber saveLotNumber(LotNumber lotNumber, int itemId) {
-        if (itemId != 0) {
-            Item item = itemService.findItemById(itemId);
-            lotNumber.setItem(item);
-        }
-        findLotNumberById(lotNumber.getId());
-        lotNumbersRepository.save(lotNumber);
-        return lotNumber;
+    public LotNumber updateLot(int lotId, LotNumber update) {
+        LotNumber lot = lotNumbersRepository.findById(lotId)
+                .orElseThrow(() -> new IllegalArgumentException("Lot not found"));
+
+        lot.setQuantity(update.getQuantity());
+        lot.setManufactureDate(update.getManufactureDate());
+
+        return lotNumbersRepository.save(lot);
     }
 
     public LotNumber deleteLotNumber(int id) {
