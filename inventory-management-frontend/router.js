@@ -24,7 +24,7 @@ function router() {
         Array.from(children).forEach((child) => {
             if (child.id === "warehouse-" + id) {
                 addActiveStorageBins(id);
-                child.classList.add("col-12");
+                child.classList.add("col-9");
                 child.classList.add("mb-3");
                 child.classList.remove("d-none");
             } else {
@@ -38,7 +38,7 @@ function router() {
         parent.innerHTML = "";
 
         Array.from(children).forEach((child) => {
-            child.classList.remove("col-12");
+            child.classList.remove("col-9");
             child.classList.remove("mb-3");
             child.classList.remove("d-none");
         });

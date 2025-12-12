@@ -15,12 +15,19 @@ import {
     createLotNumber,
 } from "./api.js";
 
-let listOfWarehouses = [];
-let listOfItems = [];
-let listOfActiveBins = [];
+const listOfWarehouses = [];
+const listOfItems = [];
+const listOfActiveBins = [];
 
-let itemWarehouseSelect = document.getElementById("item-warehouse-select");
-let itemSubmitButton = document.getElementById("create-item-submit");
+const itemWarehouseSelect = document.getElementById("item-warehouse-select");
+const itemSubmitButton = document.getElementById("create-item-submit");
+// const addInventoryRadio = document.getElementById("add-inventory-radio");
+// const removeInventoryRadio = document.getElementById("remove-inventory-radio");
+const itemSelectDiv = document.getElementById("item-select");
+const addInventorySelectDiv = document.getElementById("add-inventory");
+const removeInventorySelectDiv = document.getElementById("remove-inventory");
+const inventoryOptions = document.getElementById("add-inventory-select");
+const itemUpdateOptions = document.getElementById("inventory-select");
 
 export function getWarehouseDetails() {
     getAllWarehouses().then((warehouseList) => {
@@ -86,7 +93,8 @@ function addWarehouseToList(newWarehouse, activeStorageBins) {
     const option = document.createElement("option");
     option.value = newWarehouse.id;
     option.textContent = newWarehouse.name;
-    itemWarehouseSelect.appendChild(option);
+    itemWarehouseSelect.appendChild(option.cloneNode(true));
+    inventoryOptions.appendChild(option.cloneNode(true));
 }
 
 //gets the list of item details, then finds the quantity in the network.
@@ -95,6 +103,7 @@ export function getItemInformation() {
     getAllItems()
         .then((itemDetailList) => {
             itemDetailList.map((itemDetail) => {
+                listOfItems.push(itemDetail);
                 getQuantityOfItemId(itemDetail.id).then((quantity) => {
                     addItemDetailsToList(itemDetail, quantity);
                 });
@@ -172,7 +181,6 @@ function addItemToList(storageBin, items) {
     let itemListEl = document.createElement("ul");
     items.forEach((item) => {
         getLotNumbersByItemId(item.id).then((lot) => {
-            console.log(item.id, lot.quantity);
             let itemLi = document.createElement("li");
             itemLi.innerHTML = `
             <strong>${item.itemDetail.name}</strong> (SKU: ${item.itemDetail.sku})<br>
@@ -181,7 +189,6 @@ function addItemToList(storageBin, items) {
             itemListEl.appendChild(itemLi);
             itemListEl.classList.add("border");
         });
-        listOfItems.push(item);
     });
     binDiv.appendChild(itemListEl);
 
@@ -257,6 +264,7 @@ document
         document.getElementById("form-list").classList.remove("d-none");
         document.getElementById("warehouse-form").classList.remove("d-none");
         document.getElementById("item-form").classList.add("d-none");
+        document.getElementById("inventory-form").classList.add("d-none");
     });
 
 document.getElementById("item-form").addEventListener("submit", (event) => {
@@ -304,11 +312,74 @@ document.getElementById("item-form").addEventListener("submit", (event) => {
         .catch((err) => console.error(err));
 });
 
+document
+    .getElementById("inventory-form")
+    .addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+
+        const select = document.getElementById("inventory-select");
+
+        const itemName = select.options[select.selectedIndex].text;
+
+        // const name = formData.get("inventory-select");
+        const warehouseSelected = formData.get("add-inventory-select" ?? "");
+        const storageLocation =
+            formData.get("inventory-storage-location") === ""
+                ? ""
+                : formData.get("inventory-storage-location");
+        const quantity =
+            formData.get("inventory-quantity") === ""
+                ? 0
+                : Number(formData.get("inventory-quantity"));
+        const manufacturedDate = new Date().toISOString().slice(0, 10);
+
+        getItemsByItemName(itemName)
+            .then((itemDetail) => {
+                console.log(itemDetail);
+                if (storageLocation) {
+                    createStorageBin(warehouseSelected, storageLocation).then(
+                        (bin) => {
+                            console.log(bin, "BIN");
+                            createItem(bin.id, itemDetail.id).then((item) => {
+                                createLotNumber(
+                                    quantity,
+                                    item.id,
+                                    manufacturedDate
+                                ).then((lot) => {});
+                            });
+                        }
+                    );
+                }
+                if (itemDetail) {
+                    const container = document.getElementById("warehouse-list");
+                    container.innerHTML = "";
+                    getWarehouseDetails();
+                    document.getElementById("inventory-form").reset();
+                    document
+                        .getElementById("form-list")
+                        .classList.add("d-none");
+                }
+            })
+            .catch((err) => console.error(err));
+    });
+
 document.getElementById("item-create-btn").addEventListener("click", () => {
     document.getElementById("form-list").classList.remove("d-none");
     document.getElementById("warehouse-form").classList.add("d-none");
     document.getElementById("item-form").classList.remove("d-none");
+    document.getElementById("inventory-form").classList.add("d-none");
 });
+
+document
+    .getElementById("inventory-update-btn")
+    .addEventListener("click", () => {
+        getItemOptions();
+        document.getElementById("form-list").classList.remove("d-none");
+        document.getElementById("warehouse-form").classList.add("d-none");
+        document.getElementById("item-form").classList.add("d-none");
+        document.getElementById("inventory-form").classList.remove("d-none");
+    });
 
 document.getElementById("item-addition").addEventListener("change", (event) => {
     if (event.target.checked) {
@@ -351,6 +422,15 @@ document
             itemSubmitButton.classList.remove("disabled");
         }
     });
+
+function getItemOptions() {
+    listOfItems.forEach((item) => {
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = item.name;
+        itemUpdateOptions.appendChild(option);
+    });
+}
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {

@@ -53,7 +53,7 @@
             <div class="d-flex justify-content-around pb-5">
                 <button id="warehouse-create-btn">Create Warehouse</button>
                 <button id="item-create-btn">Create New Product</button>
-                <!-- <button id="inventory-update-btn">Update Inventory</button> -->
+                <button id="inventory-update-btn">Add Inventory</button>
             </div>
         </header>
         <section>
@@ -300,13 +300,13 @@
                             </button>
                         </div>
                     </form>
-                    <!-- <form
+                    <form
                         action="#"
                         id="inventory-form"
                         class="form bg-secondary col-12 mx-3"
                     >
                         <h3 class="text-center">Update inventory</h3>
-                        <div id="item-select" class="mb-3 mx-3 d-none">
+                        <div id="item-select" class="mb-3 mx-3">
                             <label for="inventory-select" class="form-label"
                                 >Which item will be updated?</label
                             >
@@ -314,141 +314,95 @@
                                 name="inventory-select"
                                 id="inventory-select"
                                 class="form-select"
+                                required
                             >
-                                <option value="inventory-option">
-                                    Choose an item
-                                </option>
+                                <option value="">Choose an item</option>
                             </select>
                         </div>
-                        <div class="mb-3 mx-3 form-check">
-                            <label for="add-remove-inventory" class="form-label"
+                        <!-- <div class="form-check mb-3 mx-3">
+                            <input
+                                type="radio"
+                                class="form-check-input"
+                                id="add-inventory-radio"
+                                name="inventory-action"
+                                value="add"
+                            />
+                            <label
+                                for="add-inventory-radio"
+                                class="form-check-label"
                                 >Add Inventory</label
                             >
+                        </div>
+                        <div class="form-check mb-3 mx-3">
                             <input
                                 type="radio"
-                                class="form-control"
-                                id="add-inventory"
-                                name="add-remove-inventory"
+                                class="form-check-input"
+                                id="remove-inventory-radio"
+                                name="inventory-action"
+                                value="remove"
                             />
-                        </div>
-                        <div class="mb-3 mx-3 form-check">
-                            <label for="add-remove-inventory" class="form-label"
+                            <label
+                                for="remove-inventory-radio"
+                                class="form-check-label"
                                 >Remove Inventory</label
                             >
-                            <input
-                                type="radio"
-                                class="form-control"
-                                id="remove-inventory"
-                                name="add-remove-inventory"
-                            />
-                        </div>
-                        <div id="add-inventory-select" class="mb-3 mx-3 d-none">
-                            <label for="add-warehouse-select" class="form-label"
-                                >Which warehouse is this product being added
-                                to?</label
-                            >
-                            <select
-                                name="add-warehouse-select"
-                                id="add-warehouse-select"
-                                class="form-select"
-                            >
-                                <option value="add-warehouse-option">
-                                    Choose a warehouse
-                                </option>
-                            </select>
-                        </div>
-                        <div
-                            id="remove-inventory-select"
-                            class="mb-3 mx-3 d-none"
-                        >
+                        </div> -->
+                        <div id="add-inventory" class="mb-3 mx-3">
                             <label
-                                for="remove-warehouse-select"
+                                for="add-inventory-select"
                                 class="form-label"
-                                >Which warehouse is this product being removed
-                                from?</label
                             >
+                                Which warehouse is this product being added to?
+                            </label>
                             <select
-                                name="remove-warehouse-select"
-                                id="remove-warehouse-select"
+                                name="add-inventory-select"
+                                id="add-inventory-select"
                                 class="form-select"
+                                required
                             >
-                                <option value="remove-warehouse-option">
+                                <option id="add-inventory-options" value="">
                                     Choose a warehouse
                                 </option>
                             </select>
                         </div>
-                        <div class="mb-3 mx-3">
-                            <label for="item-description" class="form-label"
-                                >Description</label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="item-description"
-                                name="item-description"
-                                placeholder="item description"
-                                required
-                            />
-                        </div>
-                        <div class="mb-3 mx-3">
-                            <label for="item-shelf-life" class="form-label"
-                                >Shelf life (optional) (in days)</label
-                            >
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="item-shelf-life"
-                                name="item-shelf-life"
-                                placeholder="item shelf-life"
-                            />
-                        </div>
-                        <div class="mb-3 mx-3">
-                            <label for="item-addition" class="form-label"
-                                >Add inventory to a warehouse?</label
-                            >
-                            <input
-                                type="checkbox"
-                                class="form-check-input"
-                                name="item-addition"
-                                id="item-addition"
-                            />
-                        </div>
-                        <div id="storage-location" class="mb-3 mx-3 d-none">
+                        <div id="storage-location" class="mb-3 mx-3">
                             <label
-                                for="item-storage-location"
+                                for="inventory-storage-location"
                                 class="form-label"
                                 >Where should the product be stored?</label
                             >
                             <input
                                 type="text"
                                 class="form-control"
-                                id="item-storage-location"
-                                name="item-storage-location"
+                                id="inventory-storage-location"
+                                name="inventory-storage-location"
                                 placeholder="Storage Location"
+                                required
                             />
                         </div>
-                        <div id="quantity-of-addition" class="mb-3 mx-3 d-none">
-                            <label for="item-quantity" class="form-label"
+                        <div id="quantity-of-addition" class="mb-3 mx-3">
+                            <label for="inventory-quantity" class="form-label"
                                 >How many of the product will be added?</label
                             >
                             <input
                                 type="number"
                                 class="form-control"
-                                id="item-quantity"
-                                name="item-quantity"
+                                id="inventory-quantity"
+                                name="inventory-quantity"
                                 placeholder="Quantity"
+                                required
                             />
                         </div>
                         <div class="text-center">
                             <button
-                                id="create-item-submit"
+                                id="add-inventory-submit"
                                 type="submit"
                                 class="btn btn-primary mb-5 mt-3"
                             >
-                                Create Item
+                                Add Inventory
                             </button>
                         </div>
-                    </form> -->
+                    </form>
                 </div>
             </div>
         </section>
