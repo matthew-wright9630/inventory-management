@@ -53,11 +53,13 @@
             <div class="d-flex justify-content-around pb-5">
                 <button id="warehouse-create-btn">Create Warehouse</button>
                 <button id="item-create-btn">Create New Product</button>
+                <!-- <button id="inventory-update-btn">Update Inventory</button> -->
             </div>
         </header>
         <section>
             <div id="section-container" class="container text-center">
                 <div id="warehouse-list" class="d-none"></div>
+
                 <div id="item-list" class="d-none"></div>
                 <div id="storage-location-list" class="d-none"></div>
                 <div
@@ -298,6 +300,155 @@
                             </button>
                         </div>
                     </form>
+                    <!-- <form
+                        action="#"
+                        id="inventory-form"
+                        class="form bg-secondary col-12 mx-3"
+                    >
+                        <h3 class="text-center">Update inventory</h3>
+                        <div id="item-select" class="mb-3 mx-3 d-none">
+                            <label for="inventory-select" class="form-label"
+                                >Which item will be updated?</label
+                            >
+                            <select
+                                name="inventory-select"
+                                id="inventory-select"
+                                class="form-select"
+                            >
+                                <option value="inventory-option">
+                                    Choose an item
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3 mx-3 form-check">
+                            <label for="add-remove-inventory" class="form-label"
+                                >Add Inventory</label
+                            >
+                            <input
+                                type="radio"
+                                class="form-control"
+                                id="add-inventory"
+                                name="add-remove-inventory"
+                            />
+                        </div>
+                        <div class="mb-3 mx-3 form-check">
+                            <label for="add-remove-inventory" class="form-label"
+                                >Remove Inventory</label
+                            >
+                            <input
+                                type="radio"
+                                class="form-control"
+                                id="remove-inventory"
+                                name="add-remove-inventory"
+                            />
+                        </div>
+                        <div id="add-inventory-select" class="mb-3 mx-3 d-none">
+                            <label for="add-warehouse-select" class="form-label"
+                                >Which warehouse is this product being added
+                                to?</label
+                            >
+                            <select
+                                name="add-warehouse-select"
+                                id="add-warehouse-select"
+                                class="form-select"
+                            >
+                                <option value="add-warehouse-option">
+                                    Choose a warehouse
+                                </option>
+                            </select>
+                        </div>
+                        <div
+                            id="remove-inventory-select"
+                            class="mb-3 mx-3 d-none"
+                        >
+                            <label
+                                for="remove-warehouse-select"
+                                class="form-label"
+                                >Which warehouse is this product being removed
+                                from?</label
+                            >
+                            <select
+                                name="remove-warehouse-select"
+                                id="remove-warehouse-select"
+                                class="form-select"
+                            >
+                                <option value="remove-warehouse-option">
+                                    Choose a warehouse
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label for="item-description" class="form-label"
+                                >Description</label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="item-description"
+                                name="item-description"
+                                placeholder="item description"
+                                required
+                            />
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label for="item-shelf-life" class="form-label"
+                                >Shelf life (optional) (in days)</label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="item-shelf-life"
+                                name="item-shelf-life"
+                                placeholder="item shelf-life"
+                            />
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label for="item-addition" class="form-label"
+                                >Add inventory to a warehouse?</label
+                            >
+                            <input
+                                type="checkbox"
+                                class="form-check-input"
+                                name="item-addition"
+                                id="item-addition"
+                            />
+                        </div>
+                        <div id="storage-location" class="mb-3 mx-3 d-none">
+                            <label
+                                for="item-storage-location"
+                                class="form-label"
+                                >Where should the product be stored?</label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="item-storage-location"
+                                name="item-storage-location"
+                                placeholder="Storage Location"
+                            />
+                        </div>
+                        <div id="quantity-of-addition" class="mb-3 mx-3 d-none">
+                            <label for="item-quantity" class="form-label"
+                                >How many of the product will be added?</label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="item-quantity"
+                                name="item-quantity"
+                                placeholder="Quantity"
+                            />
+                        </div>
+                        <div class="text-center">
+                            <button
+                                id="create-item-submit"
+                                type="submit"
+                                class="btn btn-primary mb-5 mt-3"
+                            >
+                                Create Item
+                            </button>
+                        </div>
+                    </form> -->
                 </div>
             </div>
         </section>

@@ -16,7 +16,7 @@ function getAllWarehouses() {
 }
 
 function getActiveStorageBinsInWarehouse(warehouseId) {
-    return fetch(`${URL}/storage-bin?warehouseId/${warehouseId}`, {
+    return fetch(`${URL}/storage-bin/warehouse/${warehouseId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

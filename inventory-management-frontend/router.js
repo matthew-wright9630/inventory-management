@@ -25,6 +25,7 @@ function router() {
             if (child.id === "warehouse-" + id) {
                 addActiveStorageBins(id);
                 child.classList.add("col-12");
+                child.classList.add("mb-3");
                 child.classList.remove("d-none");
             } else {
                 child.classList.add("d-none");
@@ -38,6 +39,7 @@ function router() {
 
         Array.from(children).forEach((child) => {
             child.classList.remove("col-12");
+            child.classList.remove("mb-3");
             child.classList.remove("d-none");
         });
     } else if (page === "items" && id) {

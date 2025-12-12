@@ -35,6 +35,9 @@ export function getWarehouseDetails() {
 }
 
 function addWarehouseToList(newWarehouse, activeStorageBins) {
+    if (!newWarehouse.active) {
+        return;
+    }
     let warehouseDiv = document.createElement("div");
     let titleEl = document.createElement("h2");
     let addressEl = document.createElement("p");
@@ -141,7 +144,6 @@ function addItemDetailsToList(itemDetail, itemQuantityObject) {
 
 export function addActiveStorageBins(warehouseId) {
     getActiveStorageBinsInWarehouse(warehouseId).then((activeStorageBins) => {
-        console.log(activeStorageBins);
         activeStorageBins.map((storageBin) => {
             getItemsByStorageId(storageBin.id).then((itemList) => {
                 addItemToList(storageBin, itemList);
