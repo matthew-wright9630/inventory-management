@@ -16,7 +16,7 @@ function getAllWarehouses() {
 }
 
 function getActiveStorageBinsInWarehouse(warehouseId) {
-    return fetch(`${URL}/storage-bin/warehouse/${warehouseId}`, {
+    return fetch(`${URL}/storage-bin?warehouseId/${warehouseId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -193,43 +193,58 @@ function createStorageBin(warehouseId, storageLocation) {
     const storageBinData = {
         storageLocation: storageLocation,
     };
-    return fetch(`${URL}/storage-bins/$warehouseId=${warehouseId}`, {
+    return fetch(`${URL}/storage-bin?warehouseId=${warehouseId}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(storageBinData),
-    });
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => console.error(err));
 }
 
 function createItemDetails(name, sku, description, shelfLife) {
+    if (shelfLife === "") {
+        shelfLife = 0;
+    }
     const itemDetailData = {
         name: name,
         sku: sku,
         description: description,
         shelfLife: shelfLife,
     };
-    return fetch(`${URL}/item-details`, {
+    return fetch(URL + "/item-details", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(itemDetailData),
-    });
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => console.error(err));
 }
 
-function createLot(quantity, itemId, manufacturedDate) {
+function createLotNumber(quantity, itemId, manufacturedDate) {
     const lotNumberData = {
         quantity: quantity,
-        manufacturedDate: manufacturedDate,
+        manufactureDate: manufacturedDate,
     };
-    return fetch(`${URL}/lot-numbers/$itemId=${itemId}`, {
+    return fetch(`${URL}/lot-numbers?itemId=${itemId}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(lotNumberData),
-    });
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => console.error(err));
 }
 
 function createItem(storageBinId, itemDetailId) {
@@ -243,7 +258,11 @@ function createItem(storageBinId, itemDetailId) {
             },
             body: JSON.stringify(itemData),
         }
-    );
+    )
+        .then((res) => {
+            return res.json();
+        })
+        .catch((err) => console.error(err));
 }
 
 export {
@@ -260,5 +279,5 @@ export {
     createStorageBin,
     createItemDetails,
     createItem,
-    createLot,
+    createLotNumber,
 };

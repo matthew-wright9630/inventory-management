@@ -94,6 +94,7 @@
                                 id="warehouse-name"
                                 name="warehouse-name"
                                 placeholder="warehouse name"
+                                required
                             />
                         </div>
                         <div class="mb-3 mx-3">
@@ -108,6 +109,7 @@
                                 id="warehouse-max-capacity"
                                 name="warehouse-max-capacity"
                                 placeholder="Maximum number of storage locations the warehouse can hold"
+                                required
                             />
                         </div>
                         <div class="mb-3 mx-3">
@@ -120,6 +122,7 @@
                                 id="warehouse-country"
                                 name="warehouse-country"
                                 placeholder="warehouse country"
+                                required
                             />
                         </div>
                         <div class="mb-3 mx-3">
@@ -132,6 +135,7 @@
                                 id="warehouse-state"
                                 name="warehouse-state"
                                 placeholder="warehouse state (or region)"
+                                required
                             />
                         </div>
                         <div class="mb-3 mx-3">
@@ -144,6 +148,7 @@
                                 id="warehouse-address"
                                 name="warehouse-address"
                                 placeholder="warehouse address"
+                                required
                             />
                         </div>
                         <div class="mb-3 mx-3">
@@ -188,6 +193,7 @@
                                 id="item-name"
                                 name="item-name"
                                 placeholder="product name"
+                                required
                             />
                         </div>
                         <div class="mb-3 mx-3">
@@ -200,6 +206,7 @@
                                 id="item-sku"
                                 name="item-sku"
                                 placeholder="SKU # that will be linked with the product"
+                                required
                             />
                         </div>
                         <div class="mb-3 mx-3">
@@ -220,7 +227,7 @@
                                 >Shelf life (optional) (in days)</label
                             >
                             <input
-                                type="text"
+                                type="number"
                                 class="form-control"
                                 id="item-shelf-life"
                                 name="item-shelf-life"
@@ -274,25 +281,11 @@
                                 >How many of the product will be added?</label
                             >
                             <input
-                                type="text"
+                                type="number"
                                 class="form-control"
                                 id="item-quantity"
                                 name="item-quantity"
                                 placeholder="Quantity"
-                            />
-                        </div>
-                        <div id="quantity-of-addition" class="mb-3 mx-3 d-none">
-                            <label
-                                for="item-date-manufactured"
-                                class="form-label"
-                                >What date was the product manufactured?</label
-                            >
-                            <input
-                                type="date"
-                                class="form-control"
-                                id="item-date-manufactured"
-                                name="item-date-manufactured"
-                                placeholder="Manufactured Date"
                             />
                         </div>
                         <div class="text-center">

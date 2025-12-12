@@ -9,6 +9,10 @@ import {
     getItemsByStorageId,
     createLocation,
     createWarehouse,
+    createItemDetails,
+    createStorageBin,
+    createItem,
+    createLotNumber,
 } from "./api.js";
 
 let listOfWarehouses = [];
@@ -108,7 +112,7 @@ function addItemDetailsToList(itemDetail, itemQuantityObject) {
     titleEl.innerText = itemDetail.name;
     skuEl.innerText = "SKU #: " + itemDetail.sku;
     descriptionEl.innerText = "Description: " + itemDetail.description;
-    shelfLifeEl.innerText = "Shelf Life: " + itemDetail.shelfLife;
+    shelfLifeEl.innerText = "Shelf Life: " + itemDetail.shelfLife + " days";
     quantityEl.innerText =
         "Quantity of item in network: " + itemQuantityObject.quantity;
 
@@ -137,6 +141,7 @@ function addItemDetailsToList(itemDetail, itemQuantityObject) {
 
 export function addActiveStorageBins(warehouseId) {
     getActiveStorageBinsInWarehouse(warehouseId).then((activeStorageBins) => {
+        console.log(activeStorageBins);
         activeStorageBins.map((storageBin) => {
             getItemsByStorageId(storageBin.id).then((itemList) => {
                 addItemToList(storageBin, itemList);
@@ -259,10 +264,42 @@ document.getElementById("item-form").addEventListener("submit", (event) => {
     const name = formData.get("item-name");
     const sku = formData.get("item-sku");
     const description = formData.get("item-description");
-    const shelfLife = formData.get("item-shelf-life") ?? "";
+    const shelfLife =
+        formData.get("item-shelf-life") === ""
+            ? 9999
+            : Number(formData.get("item-shelf-life"));
     const warehouseSelected = formData.get("item-warehouse-select" ?? "");
     const storageLocation = formData.get("item-storage-location" ?? "");
-    const quantity = formData.get("item-quantity" ?? "");
+    const quantity =
+        formData.get("item-quantity") === ""
+            ? 0
+            : Number(formData.get("item-quantity"));
+    const manufacturedDate = new Date().toISOString().slice(0, 10);
+
+    createItemDetails(name, sku, description, shelfLife)
+        .then((itemDetail) => {
+            if (storageLocation) {
+                createStorageBin(warehouseSelected, storageLocation).then(
+                    (bin) => {
+                        createItem(bin.id, itemDetail.id).then((item) => {
+                            createLotNumber(
+                                quantity,
+                                item.id,
+                                manufacturedDate
+                            ).then((lot) => {});
+                        });
+                    }
+                );
+            }
+            if (itemDetail) {
+                const container = document.getElementById("item-list");
+                container.innerHTML = "";
+                getItemInformation();
+                document.getElementById("item-form").reset();
+                document.getElementById("form-list").classList.add("d-none");
+            }
+        })
+        .catch((err) => console.error(err));
 });
 
 document.getElementById("item-create-btn").addEventListener("click", () => {
@@ -276,18 +313,12 @@ document.getElementById("item-addition").addEventListener("change", (event) => {
         document.getElementById("warehouse-select").classList.remove("d-none");
         document.getElementById("storage-location").classList.remove("d-none");
         document
-            .getElementById("item-date-manufactured")
-            .classList.remove("d-none");
-        document
             .getElementById("quantity-of-addition")
             .classList.remove("d-none");
     } else {
         document.getElementById("warehouse-select").classList.add("d-none");
         document.getElementById("storage-location").classList.add("d-none");
         document.getElementById("quantity-of-addition").classList.add("d-none");
-        document
-            .getElementById("item-date-manufactured")
-            .classList.add("d-none");
     }
 });
 
@@ -304,17 +335,19 @@ itemWarehouseSelect.addEventListener("change", (event) => {
 document
     .getElementById("item-storage-location")
     .addEventListener("keyup", (event) => {
-        listOfActiveBins.map((bin) => {
-            if (event.target.value === bin.storageLocation) {
-                console.log("disabled");
-                itemSubmitButton.disabled = true;
-                itemSubmitButton.classList.add("disabled");
-            } else {
-                console.log("enabled");
-                itemSubmitButton.disabled = false;
-                itemSubmitButton.classList.remove("disabled");
-            }
-        });
+        const typedValue = event.target.value.trim();
+
+        const exists = listOfActiveBins.some(
+            (bin) => bin.storageLocation === typedValue
+        );
+
+        if (exists) {
+            itemSubmitButton.disabled = true;
+            itemSubmitButton.classList.add("disabled");
+        } else {
+            itemSubmitButton.disabled = false;
+            itemSubmitButton.classList.remove("disabled");
+        }
     });
 
 document.addEventListener("keydown", (event) => {
