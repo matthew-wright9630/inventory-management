@@ -21,11 +21,6 @@ const listOfActiveBins = [];
 
 const itemWarehouseSelect = document.getElementById("item-warehouse-select");
 const itemSubmitButton = document.getElementById("create-item-submit");
-// const addInventoryRadio = document.getElementById("add-inventory-radio");
-// const removeInventoryRadio = document.getElementById("remove-inventory-radio");
-const itemSelectDiv = document.getElementById("item-select");
-const addInventorySelectDiv = document.getElementById("add-inventory");
-const removeInventorySelectDiv = document.getElementById("remove-inventory");
 const inventoryOptions = document.getElementById("add-inventory-select");
 const itemUpdateOptions = document.getElementById("inventory-select");
 
@@ -61,9 +56,9 @@ function addWarehouseToList(newWarehouse, activeStorageBins) {
     );
     warehouseDiv.id = `warehouse-${newWarehouse.id}`;
     titleEl.innerText = newWarehouse.name;
-    addressEl.innerText = `${newWarehouse.address} ${
+    addressEl.innerText = `${newWarehouse.address}, ${
         newWarehouse.addressLineTwo
-    } ${newWarehouse.location?.stateOrRegion ?? ""}, ${
+    },  ${newWarehouse.location?.stateOrRegion ?? ""}, ${
         newWarehouse.location?.country ?? ""
     }`;
     maxCapacityEl.innerText =
@@ -380,6 +375,15 @@ document
         document.getElementById("item-form").classList.add("d-none");
         document.getElementById("inventory-form").classList.remove("d-none");
     });
+
+document.getElementById("edit-warehouse-btn").addEventListener("click", () => {
+    getItemOptions();
+    document.getElementById("form-list").classList.remove("d-none");
+    document.getElementById("warehouse-form").classList.add("d-none");
+    document.getElementById("item-form").classList.add("d-none");
+    document.getElementById("inventory-form").classList.add("d-none");
+    document.getElementById("edit-warehouse-form").classList.remove("d-none");
+});
 
 document.getElementById("item-addition").addEventListener("change", (event) => {
     if (event.target.checked) {
