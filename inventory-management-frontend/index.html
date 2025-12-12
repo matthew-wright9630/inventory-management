@@ -64,7 +64,7 @@
                     id="warehouse-buttons"
                 >
                     <button id="edit-warehouse-btn">Edit Warehouse</button>
-                    <button id="remove-warehouse-btn">Remove Inventory</button>
+                    <button id="edit-inventory-btn">Update Inventory</button>
                 </div>
                 <div id="item-list" class="d-none"></div>
                 <div id="storage-location-list" class="d-none"></div>
@@ -481,6 +481,68 @@
                                 class="btn btn-primary mb-5 mt-3"
                             >
                                 Update Warehouse
+                            </button>
+                        </div>
+                    </form>
+                    <form
+                        action="#"
+                        id="edit-inventory-form"
+                        class="form bg-secondary col-12 mx-3"
+                    >
+                        <h3 class="text-center">Update inventory</h3>
+                        <div id="item-select" class="mb-3 mx-3">
+                            <label
+                                for="edit-inventory-select"
+                                class="form-label"
+                                >What item needs to be updated?</label
+                            >
+                            <select
+                                name="edit-inventory-select"
+                                id="edit-inventory-select"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">Choose an item</option>
+                            </select>
+                        </div>
+                        <div id="edit-storage-bin-div" class="mb-3 mx-3">
+                            <label
+                                for="edit-storage-bin-select"
+                                class="form-label"
+                                >Which storage bin do you want to pull
+                                from?</label
+                            >
+                            <select
+                                name="edit-storage-bin-select"
+                                id="edit-storage-bin-select"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">Choose an item</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 mx-3">
+                            <label
+                                for="edit-inventory-quantity"
+                                class="form-label text-center"
+                                >How many items to remove?</label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="edit-inventory-quantity"
+                                name="edit-inventory-quantity"
+                                placeholder=""
+                                required
+                            />
+                        </div>
+                        <div class="text-center">
+                            <button
+                                id="edit-inventory-submit"
+                                type="submit"
+                                class="btn btn-primary mb-5 mt-3"
+                            >
+                                Update Inventory
                             </button>
                         </div>
                     </form>
